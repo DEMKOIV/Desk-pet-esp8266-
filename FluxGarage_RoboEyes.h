@@ -31,12 +31,19 @@
 #define BGCOLOR 0 // background and overlays
 #define MAINCOLOR 1 // drawings
 
+#define num_moods 10
+
 // For mood type switch
 #define DEFAULT 0
 #define TIRED 1
 #define ANGRY 2
 #define HAPPY 3
 #define SQUINT 4
+#define H_SQUINT 5 // happy squint
+#define SCEPTIC 6
+#define SLEEPY 7
+#define ANNOYED 8
+#define AMAZED 9
 
 // For turning things on or off
 #define ON 1
@@ -68,10 +75,18 @@ int frameInterval = 20; // default value for 50 frames per second (1000/50 = 20 
 unsigned long fpsTimer = 0; // for timing the frames per second
 
 // For controlling mood types and expressions
+bool moods[num_moods] = {};
+
 bool tired = 0;
 bool angry = 0;
 bool happy = 0;
+bool h_squint = 0;
+bool sceptic = 0;
+bool sleepy = 0;
+bool annoyed = 0;
+bool amazed = 0;
 bool squint = 0; //---------
+
 bool curious = 0; // if true, draw the outer eye larger when looking left or right
 bool cyclops = 0; // if true, draw only one eye
 bool eyeL_open = 0; // left eye opened or closed?
@@ -203,6 +218,13 @@ void update(){
   }
 }
 
+void reset_moods(){
+  for (byte i = 0; i < sizeof(moods); i++)
+  {
+    moods[i] = 0;
+  }  
+}
+
 
 //*********************************************************************************************
 //  SETTERS METHODS
@@ -242,43 +264,12 @@ void setSpacebetween(int space) {
 }
 
 // Set mood expression
-void setMood(unsigned char mood)
-  {
-    switch (mood)
-    {
-    case TIRED:
-      tired=1; 
-      angry=0; 
-      happy=0;
-      squint=0;
-      break;
-    case ANGRY:
-      tired=0; 
-      angry=1; 
-      happy=0;
-      squint=0;
-      break;
-    case HAPPY:
-      tired=0; 
-      angry=0; 
-      happy=1;
-      squint=0;
-      break;
-    case SQUINT:
-      tired=0; 
-      angry=0; 
-      happy=0;
-      squint=1;
-      break;
+void setMood(unsigned char mood){
 
-    default:
-      tired=0; 
-      angry=0; 
-      happy=0;
-      squint=0;
-      break;
-    }
-  }
+  reset_moods();
+  moods[mood] = true;
+}
+
 
 // Set predefined position
 void setPosition(unsigned char position)
@@ -529,8 +520,8 @@ void drawEyes(){
 
 	if(autoblinker){
 		if(millis() >= blinktimer){
-		blink();
-		blinktimer = millis()+(blinkInterval*1000)+(random(blinkIntervalVariation)*1000); // calculate next time for blinking
+		  blink(1, 1);
+		  blinktimer = millis()+(blinkInterval*1000)+(random(blinkIntervalVariation)*1000); // calculate next time for blinking
 		}
 	}
 
@@ -611,17 +602,22 @@ void drawEyes(){
   }
 
   // Prepare mood type transitions
-  if (tired){eyelidsTiredHeightNext = eyeLheightCurrent/2; eyelidsAngryHeightNext = 0;} else{eyelidsTiredHeightNext = 0;}
-  if (angry){eyelidsAngryHeightNext = eyeLheightCurrent/2; eyelidsTiredHeightNext = 0;} else{eyelidsAngryHeightNext = 0;}
-  if (happy){eyelidsHappyBottomOffsetNext = eyeLheightCurrent/2;} else{eyelidsHappyBottomOffsetNext = 0;}
-  if (squint){eyeLheightNext = eyeLheightDefault/4; eyeRheightNext = eyeRheightDefault/4;} 
+  if (moods[TIRED]){eyelidsTiredHeightNext = eyeLheightCurrent/2; eyelidsAngryHeightNext = 0;} else{eyelidsTiredHeightNext = 0;}
+  if (moods[ANGRY]){eyelidsAngryHeightNext = eyeLheightCurrent/2; eyelidsTiredHeightNext = 0;} else{eyelidsAngryHeightNext = 0;}
+  if (moods[HAPPY]){eyelidsHappyBottomOffsetNext = eyeLheightCurrent/2;} else{eyelidsHappyBottomOffsetNext = 0;}
+  if (moods[SQUINT] /*&& (!autoblinker || !(millis() >= blinktimer))*/){eyeLheightNext = eyeLheightDefault/4; eyeRheightNext = eyeRheightDefault/4;} 
     else{
-      if(eyeLheightNext == eyeLheightDefault/4 && eyeRheightNext == eyeRheightDefault/4)
-      {
+      if(eyeLheightNext == eyeLheightDefault/4 && eyeRheightNext == eyeRheightDefault/4){
+        autoblinker = true;
         eyeLheightNext = eyeLheightDefault;
         eyeRheightNext = eyeRheightDefault;
       }
     } //-------
+  // if (moods[H_SQUINT]){} else{}
+  // if (moods[SCEPTIC]) {} else{}
+  // if (moods[SLEEPY])  {} else{}
+  // if (moods[ANNOYED]) {} else{}
+  // if (moods[AMAZED])  {} else{}
 
   // Draw tired top eyelids 
     eyelidsTiredHeight = (eyelidsTiredHeight + eyelidsTiredHeightNext)/2;
