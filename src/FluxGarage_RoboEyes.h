@@ -269,52 +269,6 @@ void setMood(unsigned char mood){
   reset_moods();
   moods[mood] = true;
 }
-    // switch (mood)
-    // {
-    // case TIRED:
-    //   reset_moods();
-    //   moods[]
-    //   break;
-
-    // case ANGRY:
-    //   tired=0; 
-    //   angry=1; 
-    //   happy=0;
-    //   squint=0;
-    //   h_squint=0;
-    //   sceptic=0;
-    //   sleepy=0;
-    //   annoyed=0;
-    //   amazed=0;
-    //   break;
-
-    // case HAPPY:
-    //   tired=0; 
-    //   angry=0; 
-    //   happy=1;
-    //   squint=0;
-    //   h_squint=0;
-    //   sceptic=0;
-    //   sleepy=0;
-    //   annoyed=0;
-    //   amazed=0;
-    //   break;
-
-    // case SQUINT:
-    //   tired=0; 
-    //   angry=0; 
-    //   happy=0;
-    //   squint=1;
-    //   break;
-
-    // default:
-    //   tired=0; 
-    //   angry=0; 
-    //   happy=0;
-    //   squint=0;
-    //   break;
-    // }
-  
 
 // Set predefined position
 void setPosition(unsigned char position)
@@ -442,8 +396,8 @@ int getScreenConstraint_Y(){
 // Close both eyes
 
 void close() {
-	eyeLheightNext = 1; // closing left eye
-  eyeRheightNext = 1; // closing right eye
+	eyeLheightNext = 0; // closing left eye
+  eyeRheightNext = 0; // closing right eye
   eyeL_open = 0; // left eye not opened (=closed)
 	eyeR_open = 0; // right eye not opened (=closed)
 }
@@ -649,7 +603,7 @@ void drawEyes(){
   // Prepare mood type transitions
   if (moods[TIRED]){eyelidsTiredHeightNext = eyeLheightCurrent/2; eyelidsAngryHeightNext = 0;} else{eyelidsTiredHeightNext = 0;}
   if (moods[ANGRY]){eyelidsAngryHeightNext = eyeLheightCurrent/2; eyelidsTiredHeightNext = 0;} else{eyelidsAngryHeightNext = 0;}
-  if (moods[HAPPY]){eyelidsHappyBottomOffsetNext = eyeLheightCurrent/2;} else{eyelidsHappyBottomOffsetNext = 0;}
+  if (moods[HAPPY]){eyelidsHappyBottomOffsetNext = eyeLheightCurrent/2;}
   if (moods[SQUINT]){eyeLheightNext = eyeLheightDefault/4; eyeRheightNext = eyeRheightDefault/4;} 
     else{
       if(eyeLheightNext == eyeLheightDefault/4 && eyeRheightNext == eyeRheightDefault/4)
@@ -658,11 +612,17 @@ void drawEyes(){
         eyeRheightNext = eyeRheightDefault;
       }
     } //-------
-  // if (moods[H_SQUINT]){} else{}
+  if (moods[H_SQUINT]){eyelidsHappyBottomOffsetNext = 7*eyeLheightCurrent/10;}
   // if (moods[SCEPTIC]) {} else{}
   // if (moods[SLEEPY])  {} else{}
   // if (moods[ANNOYED]) {} else{}
   // if (moods[AMAZED])  {} else{}
+  if (!moods[HAPPY] && !moods[H_SQUINT]){eyelidsHappyBottomOffsetNext = 0;}
+
+  if (eyeLheightCurrent < eyeLheightDefault/2){
+    display.fillRect(0, eyeLy, 128, eyeLheightCurrent, MAINCOLOR);
+    eyelidsHappyBottomOffsetNext = 0;
+  }
 
   // Draw tired top eyelids 
     eyelidsTiredHeight = (eyelidsTiredHeight + eyelidsTiredHeightNext)/2;
