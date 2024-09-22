@@ -3,7 +3,7 @@
  * Draws smoothly animated robot eyes on OLED displays, based on the Adafruit GFX 
  * library's graphics primitives, such as rounded rectangles and triangles.
  *   
- * Copyright (C) 2024 Dennis Hoelscher
+ * Copyright (C) 2024 Dennis Hoelscher x DEMKOIV
  * www.fluxgarage.com
  * www.youtube.com/@FluxGarage
  *
@@ -60,6 +60,11 @@
 #define NW 8 // north-west, top left 
 // for middle center set "DEFAULT"
 
+// blinking mode
+//#define DEFAULT 0
+#define LINE 1
+#define MIX 2
+
 class roboEyes
 {
 private:
@@ -77,15 +82,15 @@ unsigned long fpsTimer = 0; // for timing the frames per second
 // For controlling mood types and expressions
 bool moods[num_moods] = {};
 
-bool tired = 0;
-bool angry = 0;
-bool happy = 0;
-bool h_squint = 0;
-bool sceptic = 0;
-bool sleepy = 0;
-bool annoyed = 0;
-bool amazed = 0;
-bool squint = 0; //---------
+// bool tired = 0;
+// bool angry = 0;
+// bool happy = 0;
+// bool h_squint = 0;
+// bool sceptic = 0;
+// bool sleepy = 0;
+// bool annoyed = 0;
+// bool amazed = 0;
+// bool squint = 0; //---------
 
 bool curious = 0; // if true, draw the outer eye larger when looking left or right
 bool cyclops = 0; // if true, draw only one eye
@@ -176,6 +181,8 @@ int blinkInterval = 1; // basic interval between each blink in full seconds
 int blinkIntervalVariation = 4; // interval variaton range in full seconds, random number inside of given range will be add to the basic blinkInterval, set to 0 for no variation
 unsigned long blinktimer = 0; // for organising eyeblink timing
 
+byte blinkMode = DEFAULT;
+
 // Animation - idle mode: eyes looking in random directions
 bool idle = 0;
 int idleInterval = 1; // basic interval between each eye repositioning in full seconds
@@ -219,8 +226,7 @@ void update(){
 }
 
 void reset_moods(){
-  for (byte i = 0; i < sizeof(moods); i++)
-  {
+  for (byte i = 0; i < sizeof(moods); i++){
     moods[i] = 0;
   }  
 }
@@ -265,7 +271,6 @@ void setSpacebetween(int space) {
 
 // Set mood expression
 void setMood(unsigned char mood){
-
   reset_moods();
   moods[mood] = true;
 }
@@ -372,6 +377,10 @@ void setVFlicker (bool flickerBit) {
   vFlicker = flickerBit; // turn flicker on or off
 }
 
+void setBlinkMode(unsigned char blink_mode){
+  blinkMode = blink_mode;
+}
+
 
 //*********************************************************************************************
 //  GETTERS METHODS
@@ -396,8 +405,13 @@ int getScreenConstraint_Y(){
 // Close both eyes
 
 void close() {
-	eyeLheightNext = 0; // closing left eye
-  eyeRheightNext = 0; // closing right eye
+  if(!blinkMode){
+	  eyeLheightNext = 1; // closing left eye
+    eyeRheightNext = 1; // closing right eye
+  } else if(blinkMode == 1){
+    eyeLheightNext = 0; // closing left eye
+    eyeRheightNext = 0; // closing right eye
+  }
   eyeL_open = 0; // left eye not opened (=closed)
 	eyeR_open = 0; // right eye not opened (=closed)
 }
@@ -619,7 +633,8 @@ void drawEyes(){
   // if (moods[AMAZED])  {} else{}
   if (!moods[HAPPY] && !moods[H_SQUINT]){eyelidsHappyBottomOffsetNext = 0;}
 
-  if (eyeLheightCurrent < eyeLheightDefault/2){
+  // Line blink
+  if (eyeLheightCurrent < eyeLheightDefault/2 && blinkMode){
     display.fillRect(0, eyeLy, 128, eyeLheightCurrent, MAINCOLOR);
     eyelidsHappyBottomOffsetNext = 0;
   }
