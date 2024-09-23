@@ -628,7 +628,7 @@ void drawEyes(){
     } //-------
   if (moods[H_SQUINT]){eyelidsHappyBottomOffsetNext = 7*eyeLheightCurrent/10;}
   // if (moods[SCEPTIC]) {} else{}
-  if (moods[SLEEPY])  {} else{}
+  // if (moods[SLEEPY])  {} else{}
   // if (moods[ANNOYED]) {} else{}
   // if (moods[AMAZED])  {} else{}
   if (!moods[HAPPY] && !moods[H_SQUINT]){eyelidsHappyBottomOffsetNext = 0;}
