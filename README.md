@@ -1,3 +1,4 @@
-#### TO DO:
+#### TODO:
 #### write README
 #### write PINOUT
+
