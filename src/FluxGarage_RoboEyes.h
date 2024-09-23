@@ -630,7 +630,7 @@ void drawEyes(){
   // if (moods[SCEPTIC]) {} else{}
   // if (moods[SLEEPY])  {} else{}
   // if (moods[ANNOYED]) {} else{}
-  if (moods[AMAZED])  {} else{}
+  // if (moods[AMAZED])  {} else{}
   if (!moods[HAPPY] && !moods[H_SQUINT]){eyelidsHappyBottomOffsetNext = 0;}
 
   // Line blink
