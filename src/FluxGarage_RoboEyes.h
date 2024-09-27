@@ -182,6 +182,7 @@ int blinkIntervalVariation = 4; // interval variaton range in full seconds, rand
 unsigned long blinktimer = 0; // for organising eyeblink timing
 
 byte blinkMode = DEFAULT;
+bool wayToBlink = DEFAULT; // used for MIX blink mode
 
 // Animation - idle mode: eyes looking in random directions
 bool idle = 0;
@@ -378,7 +379,13 @@ void setVFlicker (bool flickerBit) {
 }
 
 void setBlinkMode(unsigned char blink_mode){
-  blinkMode = blink_mode;
+  if(blink_mode != MIX){
+    blinkMode = blink_mode;
+    wayToBlink = blink_mode;
+  }else{
+    blinkMode = MIX;    
+  }
+
 }
 
 
@@ -405,10 +412,10 @@ int getScreenConstraint_Y(){
 // Close both eyes
 
 void close() {
-  if(!blinkMode){
+  if(!wayToBlink){
 	  eyeLheightNext = 1; // closing left eye
     eyeRheightNext = 1; // closing right eye
-  } else if(blinkMode == 1){
+  } else if(wayToBlink){
     eyeLheightNext = 0; // closing left eye
     eyeRheightNext = 0; // closing right eye
   }
@@ -432,11 +439,19 @@ void blink() {
 // Close eye(s)
 void close(bool left, bool right) {
   if(left){
-    eyeLheightNext = 1; // blinking left eye
+    if(!wayToBlink){
+	    eyeLheightNext = 1; // closing left eye
+    } else if(blinkMode == 1){
+      eyeLheightNext = 0; // closing left eye
+    }
     eyeL_open = 0; // left eye not opened (=closed)
   }
   if(right){
-      eyeRheightNext = 1; // blinking right eye
+    if(!wayToBlink){
+      eyeRheightNext = 1; // closing right eye
+    } else if(blinkMode == 1){
+      eyeRheightNext = 0; // closing right eye
+    }
       eyeR_open = 0; // right eye not opened (=closed)
   }
 }
@@ -533,8 +548,11 @@ void drawEyes(){
 
 	if(autoblinker){
 		if(millis() >= blinktimer){
-		blink();
-		blinktimer = millis()+(blinkInterval*1000)+(random(blinkIntervalVariation)*1000); // calculate next time for blinking
+      if(blinkMode == MIX){
+        wayToBlink = random(2);
+      }
+		  blink();
+		  blinktimer = millis()+(blinkInterval*1000)+(random(blinkIntervalVariation)*1000); // calculate next time for blinking
 		}
 	}
 
@@ -634,7 +652,7 @@ void drawEyes(){
   if (!moods[HAPPY] && !moods[H_SQUINT]){eyelidsHappyBottomOffsetNext = 0;}
 
   // Line blink
-  if (eyeLheightCurrent < eyeLheightDefault/2 && blinkMode){
+  if (eyeLheightCurrent < eyeLheightDefault/2 && wayToBlink){
     display.fillRect(0, eyeLy, 128, eyeLheightCurrent, MAINCOLOR);
     eyelidsHappyBottomOffsetNext = 0;
   }

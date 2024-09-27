@@ -26,7 +26,7 @@ unsigned char moods[] = {DEFAULT, TIRED, ANGRY, H_SQUINT, HAPPY, SQUINT};
 
 void setup() {
   Serial.begin(9600);
-
+  randomSeed(analogRead(A0));
   // Startup OLED Display
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3C or 0x3D
@@ -40,7 +40,7 @@ void setup() {
   // Define some automated eyes behaviour
   roboEyes.setAutoblinker(ON, 3, 3); // Start auto blinker animation cycle -> bool active, int interval, int variation -> turn on/off, set interval between each blink in full seconds, set range for random interval variation in full seconds
   roboEyes.setIdleMode(ON, 2, 2); // Start idle animation cycle (eyes looking in random directions) -> turn on/off, set interval between each eye repositioning in full seconds, set range for random time interval variation in full seconds
-  roboEyes.setBlinkMode(LINE);
+  roboEyes.setBlinkMode(MIX);
   // Define eye shapes, all values in pixels
   roboEyes.setWidth(25, 25); // byte leftEye, byte rightEye
   roboEyes.setHeight(30, 30); // byte leftEye, byte rightEye
