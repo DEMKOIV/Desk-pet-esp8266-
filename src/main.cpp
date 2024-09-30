@@ -22,7 +22,7 @@ unsigned long del;
 byte mood = 0;
 bool anim = 0;
 
-unsigned char moods[] = {DEFAULT, TIRED, ANGRY, H_SQUINT, HAPPY, SQUINT};
+unsigned char moods[] = {DEFAULT, TIRED, ANGRY, HAPPY, H_SQUINT, SQUINT, SCEPTIC};
 
 void setup() {
   Serial.begin(9600);
