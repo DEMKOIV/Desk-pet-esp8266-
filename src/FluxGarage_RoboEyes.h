@@ -74,7 +74,7 @@ private:
 public:
 
 // For general setup - screen size and max. frame rate
-int screenWidth = 128; // OLED display width, in pixels
+int screenWidth = 128; // OLED display width, in pixels    QUESTIONABLE THINGS HERE
 int screenHeight = 64; // OLED display height, in pixels
 int frameInterval = 20; // default value for 50 frames per second (1000/50 = 20 milliseconds)
 unsigned long fpsTimer = 0; // for timing the frames per second
@@ -661,7 +661,7 @@ void drawEyes(){
   if (!moods[ANGRY] && !moods[SCEPTIC]){eyelidsAngryHeightNext = 0;}
   // Line blink
   if (eyeLheightCurrent < eyeLheightDefault/2 && wayToBlink){
-    display.fillRect(0, eyeLy, 128, eyeLheightCurrent, MAINCOLOR);
+    display.fillRect(0, eyeLy, screenWidth, eyeLheightCurrent, MAINCOLOR);
     eyelidsHappyBottomOffsetNext = 0;
   }
 
