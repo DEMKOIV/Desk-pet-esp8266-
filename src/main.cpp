@@ -22,7 +22,7 @@ unsigned long del;
 byte mood = 0;
 bool anim = 0;
 
-unsigned char moods[] = {DEFAULT, TIRED, ANGRY, HAPPY, H_SQUINT, SQUINT, SCEPTIC};
+unsigned char moods[] = {DEFAULT, TIRED, ANGRY, HAPPY, H_SQUINT, SQUINT, SCEPTIC, AMAZED};
 
 void setup() {
   Serial.begin(9600);
@@ -39,13 +39,13 @@ void setup() {
 
   // Define some automated eyes behaviour
   roboEyes.setAutoblinker(ON, 3, 3); // Start auto blinker animation cycle -> bool active, int interval, int variation -> turn on/off, set interval between each blink in full seconds, set range for random interval variation in full seconds
-  roboEyes.setIdleMode(OFF, 2, 2); // Start idle animation cycle (eyes looking in random directions) -> turn on/off, set interval between each eye repositioning in full seconds, set range for random time interval variation in full seconds
+  roboEyes.setIdleMode(ON, 2, 2); // Start idle animation cycle (eyes looking in random directions) -> turn on/off, set interval between each eye repositioning in full seconds, set range for random time interval variation in full seconds
   roboEyes.setBlinkMode(MIX);
   // Define eye shapes, all values in pixels
   roboEyes.setWidth(25, 25); // byte leftEye, byte rightEye
   roboEyes.setHeight(30, 30); // byte leftEye, byte rightEye
   roboEyes.setBorderradius(5, 5); // byte leftEye, byte rightEye
-  roboEyes.setSpacebetween(25); // int space -> can also be negative
+  roboEyes.setSpacebetween(20); // int space -> can also be negative
 
   // Cyclops mode
   //roboEyes.setCyclops(ON); // bool on/off -> if turned on, robot has only on eye
