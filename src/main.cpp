@@ -46,6 +46,7 @@ void setup() {
   roboEyes.setHeight(30, 30); // byte leftEye, byte rightEye
   roboEyes.setBorderradius(5, 5); // byte leftEye, byte rightEye
   roboEyes.setSpacebetween(20); // int space -> can also be negative
+  roboEyes.setFill(0);
 
   // Cyclops mode
   //roboEyes.setCyclops(ON); // bool on/off -> if turned on, robot has only on eye

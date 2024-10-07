@@ -87,6 +87,7 @@ bool cyclops = 0; // if true, draw only one eye
 bool eyeL_open = 0; // left eye opened or closed?
 bool eyeR_open = 0; // right eye opened or closed?
 bool moodFlag = 0; // for resseting eyes to normal size
+bool eyeFill = 1;
 
 
 //*********************************************************************************************
@@ -394,6 +395,10 @@ void setBlinkMode(unsigned char blink_mode){
 
 }
 
+void setFill(bool fill){
+  eyeFill = fill;
+}
+
 
 //*********************************************************************************************
 //  GETTERS METHODS
@@ -634,9 +639,16 @@ void drawEyes(){
 
   // Draw basic eye rectangles
   if(!moods[AMAZED] /*&& moods[SQUINT]*/){
-    display.fillRoundRect(eyeLx, eyeLy, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
-    if (!cyclops){
-      display.fillRoundRect(eyeRx, eyeRy, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
+    if(eyeFill){
+      display.fillRoundRect(eyeLx, eyeLy, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
+      if (!cyclops){
+        display.fillRoundRect(eyeRx, eyeRy, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
+      }
+    } else{
+      display.drawRoundRect(eyeLx, eyeLy, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
+      if (!cyclops){
+        display.drawRoundRect(eyeRx, eyeRy, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
+      }
     }
   }
     
@@ -664,9 +676,16 @@ void drawEyes(){
     byte Rx = Lx+static_cast<int>(spaceBetweenDefault*0.5)+eyeLwidthNext;
     byte Ry = Ly;
 
-    display.fillRoundRect(Lx, Ly, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
-    if (!cyclops){
-      display.fillRoundRect(Rx, Ry, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
+    if(eyeFill){
+      display.fillRoundRect(Lx, Ly, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
+      if (!cyclops){
+        display.fillRoundRect(Rx, Ry, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
+      }
+    } else{
+      display.drawRoundRect(Lx, Ly, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
+      if (!cyclops){
+        display.drawRoundRect(Rx, Ry, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
+      }
     }
     moodFlag = 1;
   } else if(!moods[AMAZED] && moodFlag){
