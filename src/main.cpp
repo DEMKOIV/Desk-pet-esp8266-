@@ -20,7 +20,9 @@ bool b2;
 unsigned long del;
 
 byte mood = 0;
+byte func = 0;
 bool anim = 0;
+bool fill = 1;
 
 unsigned char moods[] = {DEFAULT, TIRED, ANGRY, HAPPY, H_SQUINT, SQUINT, SCEPTIC, AMAZED};
 
@@ -46,7 +48,6 @@ void setup() {
   roboEyes.setHeight(30, 30); // byte leftEye, byte rightEye
   roboEyes.setBorderradius(5, 5); // byte leftEye, byte rightEye
   roboEyes.setSpacebetween(20); // int space -> can also be negative
-  roboEyes.setFill(0);
 
   // Cyclops mode
   //roboEyes.setCyclops(ON); // bool on/off -> if turned on, robot has only on eye
@@ -86,17 +87,25 @@ void loop() {
   }
 
   if(b2 == 1 && millis() - del >= delayy){
-
-    if(!anim){
+    if(func == 0){
       roboEyes.anim_confused();
     }
-    
-    if(anim){
+    if(func == 1){
       roboEyes.anim_laugh();
     }
-    anim = !anim;
+    if(func == 2){
+      fill = !fill;
+      roboEyes.setFill(fill);
+    }
+    func++;
     del = millis();
   }
+
+
+  if(func >= 3){
+    func = 0;
+  }
+  
 
   roboEyes.setMood(moods[mood]);
 
