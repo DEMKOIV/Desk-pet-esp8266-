@@ -35,19 +35,24 @@ void setup() {
     Serial.println(F("SSD1306 allocation failed"));
     for(;;); // Don't proceed, loop forever
   }
+  // Define eye shapes, all values in pixels
+  roboEyes.setWidth(25, 25); // byte leftEye, byte rightEye 
+  roboEyes.setHeight(30, 30); // byte leftEye, byte rightEye
+  roboEyes.setBorderradius(5, 5); // byte leftEye, byte rightEye
+  roboEyes.setSpacebetween(20); // int space -> can also be negative
+
+  // roboEyes.setWidth(13, 13); // byte leftEye, byte rightEye
+  // roboEyes.setHeight(15, 15); // byte leftEye, byte rightEye
+  // roboEyes.setBorderradius(3, 3); // byte leftEye, byte rightEye
+  // roboEyes.setSpacebetween(10); // int space -> can also be negative
 
   // Startup robo eyes
-  roboEyes.begin(SCREEN_WIDTH, SCREEN_HEIGHT, 100); // screen-width, screen-height, max framerate
+  roboEyes.begin(128, 64, 100); // screen-width, screen-height, max framerate
 
   // Define some automated eyes behaviour
   roboEyes.setAutoblinker(ON, 3, 3); // Start auto blinker animation cycle -> bool active, int interval, int variation -> turn on/off, set interval between each blink in full seconds, set range for random interval variation in full seconds
   roboEyes.setIdleMode(ON, 2, 2); // Start idle animation cycle (eyes looking in random directions) -> turn on/off, set interval between each eye repositioning in full seconds, set range for random time interval variation in full seconds
   roboEyes.setBlinkMode(MIX);
-  // Define eye shapes, all values in pixels
-  roboEyes.setWidth(25, 25); // byte leftEye, byte rightEye
-  roboEyes.setHeight(30, 30); // byte leftEye, byte rightEye
-  roboEyes.setBorderradius(5, 5); // byte leftEye, byte rightEye
-  roboEyes.setSpacebetween(20); // int space -> can also be negative
 
   // Cyclops mode
   //roboEyes.setCyclops(ON); // bool on/off -> if turned on, robot has only on eye
@@ -55,7 +60,7 @@ void setup() {
   // Define mood, curiosity and position
   //roboEyes.setMood(DEFAULT); // mood expressions, can be TIRED, ANGRY, HAPPY, DEFAULT
   //roboEyes.setPosition(DEFAULT); // cardinal directions, can be N, NE, E, SE, S, SW, W, NW, DEFAULT (default = horizontally and vertically centered)
-  //roboEyes.setCuriosity(ON); // bool on/off -> when turned on, height of the outer eyes increases when moving to the very left or very right
+  roboEyes.setCuriosity(ON); // bool on/off -> when turned on, height of the outer eyes increases when moving to the very left or very right
 
   // Set horizontal or vertical flickering
   //roboEyes.setHFlicker(ON, 2); // bool on/off, byte amplitude -> horizontal flicker: alternately displacing the eyes in the defined amplitude in pixels

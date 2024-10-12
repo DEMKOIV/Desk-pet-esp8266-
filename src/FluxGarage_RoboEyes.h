@@ -49,6 +49,8 @@
 #define ON 1
 #define OFF 0
 
+#define h_offset 6 //height / 5
+
 // For switch "predefined positions"
 #define N 1 // north, top center
 #define NE 2 // north-east, top right
@@ -102,6 +104,8 @@ int eyeLheightCurrent = 1; // start with closed eye, otherwise set to eyeLheight
 int eyeLwidthNext = eyeLwidthDefault;
 int eyeLheightNext = eyeLheightDefault;
 int eyeLheightOffset = 0;
+byte LxAmazed;
+byte LyAmazed;
 // Border Radius
 byte eyeLborderRadiusDefault = 8;
 byte eyeLborderRadiusCurrent = eyeLborderRadiusDefault;
@@ -115,6 +119,8 @@ int eyeRheightCurrent = 1; // start with closed eye, otherwise set to eyeRheight
 int eyeRwidthNext = eyeRwidthDefault;
 int eyeRheightNext = eyeRheightDefault;
 int eyeRheightOffset = 0;
+byte RxAmazed;
+byte RyAmazed;
 // Border Radius
 byte eyeRborderRadiusDefault = 8;
 byte eyeRborderRadiusCurrent = eyeRborderRadiusDefault;
@@ -215,6 +221,8 @@ void begin(int width, int height, byte frameRate) {
   eyeLy = eyeLyDefault;
   eyeLxNext = eyeLx;
   eyeLyNext = eyeLy;
+  LxAmazed = ((screenWidth)-((eyeLheightDefault*1.2)+(spaceBetweenDefault*0.5)+(eyeLheightDefault*1.2)))/2; //calculates x position of an Amazed left eye ((screenWidth)-(eyeLwidthNext+(spaceBetweenDefault*0.5)+eyeLheightNext))/2;
+  LyAmazed = ((screenHeight-(eyeLheightDefault*1.2))/2); // calculates y position of an Amazed left eye ((screenHeight-eyeLheightNext)/2);
 
 // EYE RIGHT - Coordinates
   eyeRxDefault = eyeLx+eyeLwidthCurrent+spaceBetweenDefault;
@@ -223,6 +231,8 @@ void begin(int width, int height, byte frameRate) {
   eyeRy = eyeRyDefault;
   eyeRxNext = eyeRx;
   eyeRyNext = eyeRy;
+  RxAmazed = LxAmazed+(spaceBetweenDefault*0.5)+(eyeLheightDefault*1.2);
+  RyAmazed = LyAmazed;
 }
 
 void update(){
@@ -507,11 +517,11 @@ void drawEyes(){
   //// PRE-CALCULATIONS - EYE SIZES AND VALUES FOR ANIMATION TWEENINGS ////
 
   // Vertical size offset for larger eyes when looking left or right (curious gaze)
-  if(curious){
-    if(eyeLxNext<=10){eyeLheightOffset=8;}
-    else if (eyeLxNext>=(getScreenConstraint_X()-10) && cyclops){eyeLheightOffset=8;}
+  if(curious && !moods[AMAZED] && eyeLyNext*eyeRyNext > h_offset){
+    if(eyeLxNext<=10){eyeLheightOffset=h_offset;}
+    else if (eyeLxNext>=(getScreenConstraint_X()-10) && cyclops){eyeLheightOffset=h_offset;}
     else{eyeLheightOffset=0;} // left eye
-    if(eyeRxNext>=screenWidth-eyeRwidthCurrent-10){eyeRheightOffset=8;}else{eyeRheightOffset=0;} // right eye
+    if(eyeRxNext>=screenWidth-eyeRwidthCurrent-10){eyeRheightOffset=h_offset;}else{eyeRheightOffset=0;} // right eye
   }
   // Left eye height
   eyeLheightCurrent = (eyeLheightCurrent + eyeLheightNext + eyeLheightOffset)/2;
@@ -665,26 +675,20 @@ void drawEyes(){
   if (!moods[ANGRY] && !moods[SCEPTIC])  {eyelidsAngryHeightNext = 0;}
 
   if (moods[AMAZED]){
-    eyeLheightNext = static_cast<int>(eyeLheightDefault*1.2);
-    eyeRheightNext = static_cast<int>(eyeRheightDefault*1.2);
-    eyeLwidthNext = static_cast<int>(eyeLheightDefault*1.2);
-    eyeRwidthNext = static_cast<int>(eyeRheightDefault*1.2);
-
-    byte Lx =  ((screenWidth)-(eyeLwidthNext+static_cast<int>(spaceBetweenDefault*0.5)+eyeLheightNext))/2;
-    byte Ly = ((screenHeight-eyeLheightNext)/2);
-
-    byte Rx = Lx+static_cast<int>(spaceBetweenDefault*0.5)+eyeLwidthNext;
-    byte Ry = Ly;
+    eyeLheightNext = (eyeLheightDefault*1.2);
+    eyeRheightNext = (eyeRheightDefault*1.2);
+    eyeLwidthNext = (eyeLheightDefault*1.2);
+    eyeRwidthNext = (eyeRheightDefault*1.2);
 
     if(eyeFill){
-      display.fillRoundRect(Lx, Ly, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
+      display.fillRoundRect(LxAmazed, LyAmazed, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
       if (!cyclops){
-        display.fillRoundRect(Rx, Ry, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
+        display.fillRoundRect(RxAmazed, RyAmazed, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
       }
     } else{
-      display.drawRoundRect(Lx, Ly, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
+      display.drawRoundRect(LxAmazed, LyAmazed, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
       if (!cyclops){
-        display.drawRoundRect(Rx, Ry, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
+        display.drawRoundRect(RxAmazed, RyAmazed, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
       }
     }
     moodFlag = 1;
@@ -749,7 +753,8 @@ void drawEyes(){
   // display.setTextSize(1); // set text size to 2
   // display.setTextColor(WHITE); // set text color to white
   // display.setCursor(0, 0); // set cursor position
-  // display.print(eyeLheightDefault);
+  // display.print(eyeLyNext*eyeRyNext);
+  
   display.display(); // show drawings on display
 
 } // end of drawEyes method
