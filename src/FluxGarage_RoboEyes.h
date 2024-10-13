@@ -89,7 +89,8 @@ bool cyclops = 0; // if true, draw only one eye
 bool eyeL_open = 0; // left eye opened or closed?
 bool eyeR_open = 0; // right eye opened or closed?
 bool moodFlag = 0; // for resseting eyes to normal size
-bool eyeFill = 1;
+bool eyeFill = 1; // for eye themes
+bool lineBlinkFill = 1; // for line blink theme
 
 
 //*********************************************************************************************
@@ -402,11 +403,14 @@ void setBlinkMode(unsigned char blink_mode){
   }else{
     blinkMode = MIX;    
   }
-
 }
 
 void setFill(bool fill){
   eyeFill = fill;
+}
+
+void setLineBlinkFill(bool fill){
+  lineBlinkFill = fill;
 }
 
 
@@ -676,10 +680,11 @@ void drawEyes(){
 
   if (moods[AMAZED]){
     eyeLheightNext = (eyeLheightDefault*1.2);
-    eyeRheightNext = (eyeRheightDefault*1.2);
     eyeLwidthNext = (eyeLheightDefault*1.2);
-    eyeRwidthNext = (eyeRheightDefault*1.2);
-
+    if(!cyclops){
+      eyeRheightNext = (eyeRheightDefault*1.2);
+      eyeRwidthNext = (eyeRheightDefault*1.2);
+    }
     if(eyeFill){
       display.fillRoundRect(LxAmazed, LyAmazed, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
       if (!cyclops){
@@ -694,15 +699,21 @@ void drawEyes(){
     moodFlag = 1;
   } else if(!moods[AMAZED] && moodFlag){
     eyeLheightNext = eyeLheightDefault;
-    eyeRheightNext = eyeRheightDefault;
     eyeLwidthNext = eyeLwidthDefault;
-    eyeRwidthNext = eyeRwidthDefault;
+    if(!cyclops){
+      eyeRheightNext = eyeRheightDefault;
+      eyeRwidthNext = eyeRwidthDefault;
+    }
     moodFlag = 0;
   }
 
   // Line blink
   if (eyeLheightCurrent < eyeLheightDefault/2 && wayToBlink){
-    display.fillRect(0, eyeLy, screenWidth, eyeLheightCurrent, MAINCOLOR);
+    if(eyeFill && lineBlinkFill){
+      display.fillRect(0, eyeLy, screenWidth, eyeLheightCurrent, MAINCOLOR);
+    } else {
+      display.drawRect(0, eyeLy, screenWidth, eyeLheightCurrent, MAINCOLOR);
+    }
     eyelidsHappyBottomOffsetNext = 0;
   }
 

@@ -52,7 +52,7 @@ void setup() {
   // Define some automated eyes behaviour
   roboEyes.setAutoblinker(ON, 3, 3); // Start auto blinker animation cycle -> bool active, int interval, int variation -> turn on/off, set interval between each blink in full seconds, set range for random interval variation in full seconds
   roboEyes.setIdleMode(ON, 2, 2); // Start idle animation cycle (eyes looking in random directions) -> turn on/off, set interval between each eye repositioning in full seconds, set range for random time interval variation in full seconds
-  roboEyes.setBlinkMode(MIX);
+  roboEyes.setBlinkMode(LINE);
 
   // Cyclops mode
   //roboEyes.setCyclops(ON); // bool on/off -> if turned on, robot has only on eye
@@ -101,6 +101,7 @@ void loop() {
     if(func == 2){
       fill = !fill;
       roboEyes.setFill(fill);
+      roboEyes.setLineBlinkFill(fill);
     }
     func++;
     del = millis();
