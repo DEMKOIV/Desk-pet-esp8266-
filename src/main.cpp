@@ -23,7 +23,7 @@ byte func = 0;
 bool anim = 0;
 bool fill = 1;
 
-unsigned char moods[] = {DEFAULT, TIRED, ANGRY, HAPPY, H_SQUINT, SQUINT, SCEPTIC, AMAZED};
+unsigned char moods[] = {DEFAULT, TIRED, ANGRY, HAPPY, H_SQUINT, SQUINT, SCEPTIC, AMAZED, SLEEPY};
 
 void setup() {
   Serial.begin(9600);
@@ -59,7 +59,7 @@ void setup() {
   // Define mood, curiosity and position
   //roboEyes.setMood(DEFAULT); // mood expressions, can be TIRED, ANGRY, HAPPY, DEFAULT
   //roboEyes.setPosition(DEFAULT); // cardinal directions, can be N, NE, E, SE, S, SW, W, NW, DEFAULT (default = horizontally and vertically centered)
-  roboEyes.setCuriosity(ON); // bool on/off -> when turned on, height of the outer eyes increases when moving to the very left or very right
+  roboEyes.setCuriosity(OFF); // bool on/off -> when turned on, height of the outer eyes increases when moving to the very left or very right
   // Set horizontal or vertical flickering
   //roboEyes.setHFlicker(ON, 2); // bool on/off, byte amplitude -> horizontal flicker: alternately displacing the eyes in the defined amplitude in pixels
   //roboEyes.setVFlicker(ON, 2); // bool on/off, byte amplitude -> vertical flicker: alternately displacing the eyes in the defined amplitude in pixels
