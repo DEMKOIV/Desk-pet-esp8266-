@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <Adafruit_SSD1306.h>
 
-
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
@@ -61,7 +60,6 @@ void setup() {
   //roboEyes.setMood(DEFAULT); // mood expressions, can be TIRED, ANGRY, HAPPY, DEFAULT
   //roboEyes.setPosition(DEFAULT); // cardinal directions, can be N, NE, E, SE, S, SW, W, NW, DEFAULT (default = horizontally and vertically centered)
   roboEyes.setCuriosity(ON); // bool on/off -> when turned on, height of the outer eyes increases when moving to the very left or very right
-
   // Set horizontal or vertical flickering
   //roboEyes.setHFlicker(ON, 2); // bool on/off, byte amplitude -> horizontal flicker: alternately displacing the eyes in the defined amplitude in pixels
   //roboEyes.setVFlicker(ON, 2); // bool on/off, byte amplitude -> vertical flicker: alternately displacing the eyes in the defined amplitude in pixels
@@ -94,6 +92,7 @@ void loop() {
   if(b2 == 1 && millis() - del >= delayy){
     if(func == 0){
       roboEyes.anim_confused();
+      // roboEyes.blink(1, 0);
     }
     if(func == 1){
       roboEyes.anim_laugh();

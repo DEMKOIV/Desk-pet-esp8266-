@@ -84,6 +84,7 @@ unsigned long fpsTimer = 0; // for timing the frames per second
 // For controlling mood types and expressions
 bool moods[num_moods] = {};
 
+byte curiousOffset = 2; // amount that eye's heaight incrases in curious mode: defaultHeight*curiousOffset/10 (will be devided by 10, so = 0.2 actually) 
 bool curious = 0; // if true, draw the outer eye larger when looking left or right
 bool cyclops = 0; // if true, draw only one eye
 bool eyeL_open = 0; // left eye opened or closed?
@@ -413,6 +414,9 @@ void setLineBlinkFill(bool fill){
   lineBlinkFill = fill;
 }
 
+void setCuriousityOffset(byte offset){
+  curiousOffset = offset;
+}
 
 //*********************************************************************************************
 //  GETTERS METHODS
@@ -521,12 +525,22 @@ void drawEyes(){
   //// PRE-CALCULATIONS - EYE SIZES AND VALUES FOR ANIMATION TWEENINGS ////
 
   // Vertical size offset for larger eyes when looking left or right (curious gaze)
-  if(curious && !moods[AMAZED] && eyeLyNext*eyeRyNext > h_offset){
-    if(eyeLxNext<=10){eyeLheightOffset=h_offset;}
-    else if (eyeLxNext>=(getScreenConstraint_X()-10) && cyclops){eyeLheightOffset=h_offset;}
-    else{eyeLheightOffset=0;} // left eye
-    if(eyeRxNext>=screenWidth-eyeRwidthCurrent-10){eyeRheightOffset=h_offset;}else{eyeRheightOffset=0;} // right eye
+  if(curious && !moods[AMAZED] && eyeLyNext*eyeRyNext > int(eyeLheightDefault * curiousOffset / 10.0 + 0.5)/*offset basically*/){
+    if(eyeLxNext<=10){
+      eyeLheightOffset = int(eyeLheightDefault * curiousOffset / 10.0 + 0.5);
+    } else if (eyeLxNext>=(getScreenConstraint_X()-10) && cyclops){
+      eyeLheightOffset = int(eyeLheightDefault * curiousOffset / 10.0 + 0.5);
+    } else{eyeLheightOffset = 0;} // left eye
+
+    if(eyeRxNext>=screenWidth-eyeRwidthCurrent-10){
+      eyeRheightOffset = int(eyeRheightDefault * curiousOffset / 10.0 + 0.5);
+    }else{
+      eyeRheightOffset = 0;
+    } // right eye
+  } else{
+    eyeLheightOffset = 0;
   }
+
   // Left eye height
   eyeLheightCurrent = (eyeLheightCurrent + eyeLheightNext + eyeLheightOffset)/2;
   eyeLy+= ((eyeLheightDefault-eyeLheightCurrent)/2); // vertical centering of eye when closing
