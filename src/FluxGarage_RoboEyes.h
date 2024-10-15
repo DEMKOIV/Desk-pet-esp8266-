@@ -159,6 +159,9 @@ byte eyelidsHappyBottomOffsetNext = 0;
 int spaceBetweenDefault = 10;
 int spaceBetweenCurrent = spaceBetweenDefault;
 int spaceBetweenNext = 10;
+// upper sleepy eyelids height
+byte eyelidsSleepyHeight;
+
 
 
 //*********************************************************************************************
@@ -209,6 +212,7 @@ bool laughToggle = 1;
 
 // Startup RoboEyes with defined screen-width, screen-height and max. frames per second
 void begin(int width, int height, byte frameRate) {
+
 	screenWidth = width; // OLED display width, in pixels
 	screenHeight = height; // OLED display height, in pixels
   display.clearDisplay(); // clear the display buffer
@@ -226,7 +230,7 @@ void begin(int width, int height, byte frameRate) {
   LxAmazed = ((screenWidth)-((eyeLheightDefault*1.2)+(spaceBetweenDefault*0.5)+(eyeLheightDefault*1.2)))/2; //calculates x position of an Amazed left eye ((screenWidth)-(eyeLwidthNext+(spaceBetweenDefault*0.5)+eyeLheightNext))/2;
   LyAmazed = ((screenHeight-(eyeLheightDefault*1.2))/2); // calculates y position of an Amazed left eye ((screenHeight-eyeLheightNext)/2);
 
-// EYE RIGHT - Coordinates
+  // EYE RIGHT - Coordinates
   eyeRxDefault = eyeLx+eyeLwidthCurrent+spaceBetweenDefault;
   eyeRyDefault = eyeLy;
   eyeRx = eyeRxDefault;
@@ -235,6 +239,8 @@ void begin(int width, int height, byte frameRate) {
   eyeRyNext = eyeRy;
   RxAmazed = LxAmazed+(spaceBetweenDefault*0.5)+(eyeLheightDefault*1.2);
   RyAmazed = LyAmazed;
+
+  eyelidsSleepyHeight = int(eyeLheightDefault*0.7+0.5); // +0.5 to round the number without using math lib
 }
 
 void update(){
@@ -525,9 +531,9 @@ void drawEyes(){
   //// PRE-CALCULATIONS - EYE SIZES AND VALUES FOR ANIMATION TWEENINGS ////
 
   // Vertical size offset for larger eyes when looking left or right (curious gaze)
-  if(curious && !moods[AMAZED] && eyeLyNext*eyeRyNext > int(eyeLheightDefault * curiousOffset / 10.0 + 0.5)/*offset basically*/){
+  if(curious && !moods[AMAZED] && !moods[SLEEPY] && eyeLyNext*eyeRyNext > int(eyeLheightDefault * curiousOffset / 10.0 + 0.5)/*offset basically*/){
     if(eyeLxNext<=10){
-      eyeLheightOffset = int(eyeLheightDefault * curiousOffset / 10.0 + 0.5);
+      eyeLheightOffset = int(eyeLheightDefault * curiousOffset / 10.0 + 0.5); 
     } else if (eyeLxNext>=(getScreenConstraint_X()-10) && cyclops){
       eyeLheightOffset = int(eyeLheightDefault * curiousOffset / 10.0 + 0.5);
     } else{eyeLheightOffset = 0;} // left eye
@@ -783,13 +789,13 @@ void drawEyes(){
       }
   }
   if(moods[SLEEPY]){
-    display.fillRect(eyeLx, eyeLy-10, eyeLwidthCurrent, int(eyeLheightDefault*0.7+0.5+10), BGCOLOR); // left eye
+    display.fillRect(eyeLx, eyeLy, eyeLwidthCurrent, eyelidsSleepyHeight, BGCOLOR); // left eye
     if (!cyclops){ 
-      display.fillRect(eyeRx, eyeLy-10, eyeRwidthCurrent, int(eyeLheightDefault*0.7+0.5+10), BGCOLOR); // right eye
+      display.fillRect(eyeRx, eyeLy, eyeRwidthCurrent, eyelidsSleepyHeight, BGCOLOR); // right eye
     }
     if (!cyclops){ // --------------OPTIMIZE HERE--------------
-      display.fillTriangle(eyeLx, eyeLy+int(eyeLheightDefault*0.7+0.5-1), eyeLx+eyeLwidthCurrent, eyeLy+int(eyeLheightDefault*0.7+0.5-1), eyeLx, eyeLy+int(eyeLheightDefault*0.7+0.5+1), BGCOLOR); // left eye 
-      display.fillTriangle(eyeRx, eyeRy+int(eyeRheightDefault*0.7+0.5-1), eyeRx+eyeRwidthCurrent, eyeRy+int(eyeRheightDefault*0.7+0.5-1), eyeRx+eyeRwidthCurrent, eyeRy+int(eyeRheightDefault*0.7+0.5+1), BGCOLOR); // right eye
+      display.fillTriangle(eyeLx, eyeLy+eyelidsSleepyHeight-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsSleepyHeight-1, eyeLx, eyeLy+eyelidsSleepyHeight+1, BGCOLOR); // left eye 
+      display.fillTriangle(eyeRx, eyeRy+eyelidsSleepyHeight-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsSleepyHeight-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsSleepyHeight+1, BGCOLOR); // right eye
     } else {
       // Cyclops tired eyelids
       display.fillTriangle(eyeLx, eyeLy-1, eyeLx+(eyeLwidthCurrent/2), eyeLy-1, eyeLx, eyeLy+eyelidsTiredHeight-1, BGCOLOR); // left eyelid half
