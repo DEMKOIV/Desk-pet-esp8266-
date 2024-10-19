@@ -805,7 +805,7 @@ void drawEyes(){
 
   // Line blink
   if (eyeLheightCurrent < eyeLheightDefault/2 && wayToBlink){
-    if(!moods[ANNOYED]){
+    if(!moods[SLEEPY]){
       if(eyeFill && lineBlinkFill){
         display.fillRect(0, eyeLy, screenWidth, eyeLheightCurrent, MAINCOLOR);
       } else {
