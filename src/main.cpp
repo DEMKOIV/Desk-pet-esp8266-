@@ -23,7 +23,7 @@ byte func = 0;
 bool anim = 0;
 bool fill = 1;
 
-unsigned char moods[] = {DEFAULT, TIRED, ANGRY, HAPPY, H_SQUINT, SQUINT, SCEPTIC, AMAZED, SLEEPY};
+unsigned char moods[] = {DEFAULT, TIRED, ANGRY, HAPPY, H_SQUINT, SQUINT, SCEPTIC, AMAZED, SLEEPY, SLEEP};
 
 void setup() {
   Serial.begin(9600);
@@ -49,8 +49,8 @@ void setup() {
   roboEyes.begin(128, 64, 100); // screen-width, screen-height, max framerate
 
   // Define some automated eyes behaviour
-  roboEyes.setAutoblinker(ON, 3, 3); // Start auto blinker animation cycle -> bool active, int interval, int variation -> turn on/off, set interval between each blink in full seconds, set range for random interval variation in full seconds
-  roboEyes.setIdleMode(ON, 2, 2); // Start idle animation cycle (eyes looking in random directions) -> turn on/off, set interval between each eye repositioning in full seconds, set range for random time interval variation in full seconds
+  roboEyes.setAutoblinker(OFF, 3, 3); // Start auto blinker animation cycle -> bool active, int interval, int variation -> turn on/off, set interval between each blink in full seconds, set range for random interval variation in full seconds
+  roboEyes.setIdleMode(OFF, 2, 2); // Start idle animation cycle (eyes looking in random directions) -> turn on/off, set interval between each eye repositioning in full seconds, set range for random time interval variation in full seconds
   roboEyes.setBlinkMode(MIX);
 
   // Cyclops mode

@@ -42,7 +42,7 @@
 #define H_SQUINT 5 // happy squint
 #define SCEPTIC 6
 #define SLEEPY 7
-#define ANNOYED 8
+#define SLEEP 8
 #define AMAZED 9
 
 // For turning things on or off
@@ -161,6 +161,7 @@ int spaceBetweenCurrent = spaceBetweenDefault;
 int spaceBetweenNext = 10;
 // upper sleepy eyelids height
 byte eyelidsSleepyHeight;
+byte eyelidsSleepHeight;
 
 
 
@@ -241,6 +242,7 @@ void begin(int width, int height, byte frameRate) {
   RyAmazed = LyAmazed;
 
   eyelidsSleepyHeight = int(eyeLheightDefault*0.7+0.5); // +0.5 to round the number without using math lib
+  eyelidsSleepHeight = eyeLheightDefault-3;  // ---------MAKE ADAPTIVE---------
 }
 
 void update(){
@@ -531,7 +533,7 @@ void drawEyes(){
   //// PRE-CALCULATIONS - EYE SIZES AND VALUES FOR ANIMATION TWEENINGS ////
 
   // Vertical size offset for larger eyes when looking left or right (curious gaze)
-  if(curious && !moods[AMAZED] && !moods[SLEEPY] && eyeLyNext*eyeRyNext > int(eyeLheightDefault * curiousOffset / 10.0 + 0.5)/*offset basically*/){
+  if(curious && !moods[AMAZED] && !moods[SLEEPY] && eyeLyNext*eyeRyNext > int(eyeLheightDefault * curiousOffset / 10.0 + 0.5)/*offset basically*/){  //that third && is to not activate curiosity in the eye is too close to upper screen boundary
     if(eyeLxNext<=10){
       eyeLheightOffset = int(eyeLheightDefault * curiousOffset / 10.0 + 0.5); 
     } else if (eyeLxNext>=(getScreenConstraint_X()-10) && cyclops){
@@ -693,12 +695,26 @@ void drawEyes(){
   if (moods[H_SQUINT])  {eyelidsHappyBottomOffsetNext = 7*eyeLheightCurrent/10;}
   if (moods[SQUINT])  {eyelidsHappyBottomOffsetNext = 8*eyeLheightCurrent/10;}
   // if (moods[SCEPTIC]) {} else{}
-  // if (moods[SLEEPY])  {} else{}
   // if (moods[ANNOYED]) {} else{}
   if (!moods[HAPPY] && !moods[H_SQUINT] && !moods[SQUINT])  {eyelidsHappyBottomOffsetNext = 0;}
   if (!moods[ANGRY] && !moods[SCEPTIC])  {eyelidsAngryHeightNext = 0;}
 
-  if (moods[AMAZED]){
+  if (moods[SLEEP]){
+    display.fillRoundRect(eyeLx-1, eyeLy, eyeLwidthCurrent+2, eyelidsSleepHeight, eyeLborderRadiusCurrent, BGCOLOR); // left eye
+    if (!cyclops){ 
+      display.fillRoundRect(eyeRx-1, eyeRy, eyeRwidthCurrent+2, eyelidsSleepHeight, eyeRborderRadiusCurrent, BGCOLOR); // right eye
+    }
+    // eyelidsHappyBottomOffsetNext = eyeLheightCurrent-1;
+    eyeLyNext = screenHeight/2-eyeLheightDefault;
+    eyeRyNext = screenHeight/2-eyeLheightDefault;
+    moodFlag = 1;
+    } else if(!moods[SLEEP] && moodFlag){
+      // eyeLyNext = eyeLyDefault;
+      // eyeRyNext = eyeRyDefault;
+      // moodFlag = 0;
+    }
+
+  if (moods[AMAZED]){ //---------- fix this ----------
     eyeLheightNext = (eyeLheightDefault*1.2);
     eyeLwidthNext = (eyeLheightDefault*1.2);
     if(!cyclops){
@@ -726,24 +742,6 @@ void drawEyes(){
     }
     moodFlag = 0;
   }
-
-  // // Line blink
-  // if (eyeLheightCurrent < eyeLheightDefault/2 && wayToBlink){
-  //   if(!moods[ANNOYED]){
-  //     if(eyeFill && lineBlinkFill){
-  //       display.fillRect(0, eyeLy, screenWidth, eyeLheightCurrent, MAINCOLOR);
-  //     } else {
-  //       display.drawRect(0, eyeLy, screenWidth, eyeLheightCurrent, MAINCOLOR);
-  //     }
-  //   } else if(eyeLheightCurrent < eyeLheightCurrent-int(eyeLheightDefault*0.8+0.5)){
-  //     if(eyeFill && lineBlinkFill){
-  //       display.fillRect(0, eyeLy+int(eyeLheightDefault*0.8+0.5+3), screenWidth, eyeLheightCurrent, MAINCOLOR);
-  //     } else {
-  //       display.drawRect(0, eyeLy+int(eyeLheightDefault*0.8+0.5+3), screenWidth, eyeLheightCurrent, MAINCOLOR);
-  //     }
-  //   }
-  //   eyelidsHappyBottomOffsetNext = 0;
-  // }
 
   // Draw tired top eyelids 
   eyelidsTiredHeight = (eyelidsTiredHeight + eyelidsTiredHeightNext)/2;
@@ -788,12 +786,12 @@ void drawEyes(){
         display.fillRoundRect(eyeRx-1, (eyeRy+eyeRheightCurrent)-eyelidsHappyBottomOffset+1, eyeRwidthCurrent+2, eyeRheightDefault, eyeRborderRadiusCurrent, BGCOLOR); // right eye
       }
   }
-  if(moods[SLEEPY]){
+  if(moods[SLEEPY]){ // ----------ADAPT FOR CYCLOPS MODE----------
     display.fillRect(eyeLx, eyeLy, eyeLwidthCurrent, eyelidsSleepyHeight, BGCOLOR); // left eye
     if (!cyclops){ 
       display.fillRect(eyeRx, eyeLy, eyeRwidthCurrent, eyelidsSleepyHeight, BGCOLOR); // right eye
     }
-    if (!cyclops){ // --------------OPTIMIZE HERE--------------
+    if (!cyclops){
       display.fillTriangle(eyeLx, eyeLy+eyelidsSleepyHeight-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsSleepyHeight-1, eyeLx, eyeLy+eyelidsSleepyHeight+1, BGCOLOR); // left eye 
       display.fillTriangle(eyeRx, eyeRy+eyelidsSleepyHeight-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsSleepyHeight-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsSleepyHeight+1, BGCOLOR); // right eye
     } else {
@@ -821,10 +819,14 @@ void drawEyes(){
     eyelidsHappyBottomOffsetNext = 0;
   }
 
-  // display.setTextSize(1); // set text size to 2
-  // display.setTextColor(WHITE); // set text color to white
-  // display.setCursor(0, 0); // set cursor position
-  // display.print(eyeLyNext*eyeRyNext);
+  display.setTextSize(1); // set text size to 2
+  display.setTextColor(WHITE); // set text color to white
+  display.setCursor(105, 21); // set cursor position
+  display.print("z");
+  display.setCursor(111, 13); // set cursor position
+  display.print("Z");
+  display.setCursor(117 , 5); // set cursor position
+  display.print("z");
   
   display.display(); // show drawings on display
 
