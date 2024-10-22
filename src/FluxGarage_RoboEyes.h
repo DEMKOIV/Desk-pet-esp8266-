@@ -254,9 +254,21 @@ void update(){
 }
 
 void reset_moods(){
-  for (byte i = 0; i < sizeof(moods); i++){
+  if(moods[SLEEP]){
+    eyeLyNext = eyeLyDefault;
+    eyeRyNext = eyeRyDefault;
+  }
+  if(moods[AMAZED]){
+    eyeLheightNext = eyeLheightDefault;
+    eyeLwidthNext = eyeLwidthDefault;
+    if(!cyclops){
+      eyeRheightNext = eyeRheightDefault;
+      eyeRwidthNext = eyeRwidthDefault;
+    }
+  }
+   for (byte i = 0; i < sizeof(moods); i++){
     moods[i] = 0;
-  }  
+  }
 }
 
 
@@ -533,7 +545,7 @@ void drawEyes(){
   //// PRE-CALCULATIONS - EYE SIZES AND VALUES FOR ANIMATION TWEENINGS ////
 
   // Vertical size offset for larger eyes when looking left or right (curious gaze)
-  if(curious && !moods[AMAZED] && !moods[SLEEPY] && eyeLyNext*eyeRyNext > int(eyeLheightDefault * curiousOffset / 10.0 + 0.5)/*offset basically*/){  //that third && is to not activate curiosity in the eye is too close to upper screen boundary
+  if(curious && !moods[AMAZED] && !moods[SLEEPY] && !moods[SLEEP] && eyeLyNext*eyeRyNext > int(eyeLheightDefault * curiousOffset / 10.0 + 0.5)/*offset basically*/){  //that third && is to not activate curiosity in the eye is too close to upper screen boundary
     if(eyeLxNext<=10){
       eyeLheightOffset = int(eyeLheightDefault * curiousOffset / 10.0 + 0.5); 
     } else if (eyeLxNext>=(getScreenConstraint_X()-10) && cyclops){
@@ -593,7 +605,7 @@ void drawEyes(){
 
   //// APPLYING MACRO ANIMATIONS ////
 
-	if(autoblinker){
+	if(autoblinker && !moods[SLEEP]){
 		if(millis() >= blinktimer){
       if(blinkMode == MIX){
         wayToBlink = random(2);
@@ -630,7 +642,7 @@ void drawEyes(){
   }
 
   // Idle - eyes moving to random positions on screen
-  if(idle){
+  if(idle && !moods[SLEEP] /*&& !moods[AMAZED]*/){
     if(millis() >= idleAnimationTimer){
       eyeLxNext = random(getScreenConstraint_X());
       eyeLyNext = random(getScreenConstraint_Y());
@@ -707,14 +719,9 @@ void drawEyes(){
     // eyelidsHappyBottomOffsetNext = eyeLheightCurrent-1;
     eyeLyNext = screenHeight/2-eyeLheightDefault;
     eyeRyNext = screenHeight/2-eyeLheightDefault;
-    moodFlag = 1;
-    } else if(!moods[SLEEP] && moodFlag){
-      // eyeLyNext = eyeLyDefault;
-      // eyeRyNext = eyeRyDefault;
-      // moodFlag = 0;
-    }
+  }
 
-  if (moods[AMAZED]){ //---------- fix this ----------
+  if (moods[AMAZED]){ //---------- fix this ---------- 1.2 stuff
     eyeLheightNext = (eyeLheightDefault*1.2);
     eyeLwidthNext = (eyeLheightDefault*1.2);
     if(!cyclops){
@@ -722,9 +729,9 @@ void drawEyes(){
       eyeRwidthNext = (eyeRheightDefault*1.2);
     }
     if(eyeFill){
-      display.fillRoundRect(LxAmazed, LyAmazed, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
+      display.fillRoundRect(LxAmazed, LyAmazed, eyeLwidthNext, eyeLheightNext, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
       if (!cyclops){
-        display.fillRoundRect(RxAmazed, RyAmazed, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
+        display.fillRoundRect(RxAmazed, RyAmazed, eyeRwidthNext, eyeRheightNext, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
       }
     } else{
       display.drawRoundRect(LxAmazed, LyAmazed, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
@@ -732,15 +739,6 @@ void drawEyes(){
         display.drawRoundRect(RxAmazed, RyAmazed, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
       }
     }
-    moodFlag = 1;
-  } else if(!moods[AMAZED] && moodFlag){
-    eyeLheightNext = eyeLheightDefault;
-    eyeLwidthNext = eyeLwidthDefault;
-    if(!cyclops){
-      eyeRheightNext = eyeRheightDefault;
-      eyeRwidthNext = eyeRwidthDefault;
-    }
-    moodFlag = 0;
   }
 
   // Draw tired top eyelids 
@@ -821,13 +819,9 @@ void drawEyes(){
 
   display.setTextSize(1); // set text size to 2
   display.setTextColor(WHITE); // set text color to white
-  display.setCursor(105, 21); // set cursor position
-  display.print("z");
-  display.setCursor(111, 13); // set cursor position
-  display.print("Z");
-  display.setCursor(117 , 5); // set cursor position
-  display.print("z");
-  
+  display.setCursor(0, 0); // set cursor position
+  display.print(eyeLheightNext);
+
   display.display(); // show drawings on display
 
 } // end of drawEyes method
@@ -835,3 +829,5 @@ void drawEyes(){
 }; // end of class roboEyes
 
 #endif
+// TODO: 
+// - Maybe make a function to check if the mood is blinkable, moveable and curiosity-able to avoid if statements
