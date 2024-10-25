@@ -559,62 +559,7 @@ void drawEyes(){
     } // right eye
   } else{
     eyeLheightOffset = 0;
-  }
-
-  // Left eye height
-  // eyeLheightCurrent = (eyeLheightCurrent + eyeLheightNext + eyeLheightOffset)/2;
-
-  // display.setTextSize(1); // set text size to 2
-  // display.setTextColor(WHITE); // set text color to white
-  // display.setCursor(0, 0); // set cursor position
-  // display.print(eyeLheightCurrent);
-  // display.setCursor(0, 9); // set cursor position
-  // display.print((eyeLheightCurrent + eyeLheightNext + eyeLheightOffset)/2);
-  //   display.setCursor(0, 17); // set cursor position
-  // display.print(eyeLheightNext);
-
-
-  // ----old-
-  // eyeLheightCurrent = (eyeLheightCurrent + eyeLheightNext + eyeLheightOffset)/2;
-  // eyeLy+= ((eyeLheightDefault-eyeLheightCurrent)/2); // vertical centering of eye when closing
-  // eyeLy-= eyeLheightOffset/2;
-  // // Right eye height
-  // eyeRheightCurrent = (eyeRheightCurrent + eyeRheightNext + eyeRheightOffset)/2;
-  // eyeRy+= (eyeRheightDefault-eyeRheightCurrent)/2; // vertical centering of eye when closing
-  // eyeRy-= eyeRheightOffset/2;
-
-
-  // // Open eyes again after closing them
-	// if(eyeL_open){
-  // 	if(eyeLheightCurrent <= 1 + eyeLheightOffset){eyeLheightNext = eyeLheightDefault;/* eyeLwidthNext = eyeLwidthDefault;*/} 
-  // }
-  // if(eyeR_open){
-  // 	if(eyeRheightCurrent <= 1 + eyeRheightOffset){eyeRheightNext = eyeRheightDefault; /*eyeRwidthNext = eyeRwidthDefault;*/} 
-  // }
-
-  // // Left eye width
-  // eyeLwidthCurrent = (eyeLwidthCurrent + eyeLwidthNext)/2;
-  // // Right eye width
-  // eyeRwidthCurrent = (eyeRwidthCurrent + eyeRwidthNext)/2;
-
-
-  // // Space between eyes
-  // spaceBetweenCurrent = (spaceBetweenCurrent + spaceBetweenNext)/2;
-
-  // // Left eye coordinates
-  // eyeLx = (eyeLx + eyeLxNext)/2;
-  // eyeLy = (eyeLy + eyeLyNext)/2;
-  // // Right eye coordinates
-  // eyeRxNext = eyeLxNext+eyeLwidthCurrent+spaceBetweenCurrent; // right eye's x position depends on left eyes position + the space between
-  // eyeRyNext = eyeLyNext; // right eye's y position should be the same as for the left eye
-  // eyeRx = (eyeRx + eyeRxNext)/2;
-  // eyeRy = (eyeRy + eyeRyNext)/2;
-
-  // // Left eye border radius
-  // eyeLborderRadiusCurrent = (eyeLborderRadiusCurrent + eyeLborderRadiusNext)/2;
-  // // Right eye border radius
-  // eyeRborderRadiusCurrent = (eyeRborderRadiusCurrent + eyeRborderRadiusNext)/2;
-  
+  }  
 
   //// APPLYING MACRO ANIMATIONS ////
 

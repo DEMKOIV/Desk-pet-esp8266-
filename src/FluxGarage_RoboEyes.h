@@ -83,6 +83,7 @@ unsigned long fpsTimer = 0; // for timing the frames per second
 
 // For controlling mood types and expressions
 bool moods[num_moods] = {};
+// byte 
 
 byte curiousOffset = 2; // amount that eye's heaight incrases in curious mode: defaultHeight*curiousOffset/10 (will be devided by 10, so = 0.2 actually) 
 bool curious = 0; // if true, draw the outer eye larger when looking left or right
@@ -452,6 +453,16 @@ int getScreenConstraint_Y(){
  return screenHeight-eyeLheightDefault; // using default height here, because height will vary when blinking and in curious mode
 }
 
+// Returns current mood's defenant in int form
+byte getCurrentMood(){
+  for(byte i = 0; i < sizeof(moods); i++){
+    if(moods[i]){
+      return i;
+    }
+  }
+  return 255;
+}
+
 
 //*********************************************************************************************
 //  BASIC ANIMATION METHODS
@@ -815,10 +826,10 @@ void drawEyes(){
     }
   }
 
-  // display.setTextSize(1); // set text size to 2
-  // display.setTextColor(WHITE); // set text color to white
-  // display.setCursor(0, 0); // set cursor position
-  // display.print(eyeLheightCurrent);
+  display.setTextSize(1); // set text size to 2
+  display.setTextColor(WHITE); // set text color to white
+  display.setCursor(0, 0); // set cursor position
+  display.print(getCurrentMood());
 
   display.display(); // show drawings on display
 
