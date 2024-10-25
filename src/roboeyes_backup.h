@@ -572,48 +572,53 @@ void drawEyes(){
   // display.print((eyeLheightCurrent + eyeLheightNext + eyeLheightOffset)/2);
   //   display.setCursor(0, 17); // set cursor position
   // display.print(eyeLheightNext);
+  if(moods[AMAZED]){
+    eyeLheightNext = int(eyeLheightDefault*1.2+0.5);
+    eyeLwidthNext = int(eyeLheightDefault*1.2+0.5);
+    if(!cyclops){
+      eyeRheightNext = int(eyeRheightDefault*1.2+0.5);
+      eyeRwidthNext = int(eyeRheightDefault*1.2+0.5);
+    }
+  }
+  eyeLheightCurrent = (eyeLheightCurrent + eyeLheightNext + eyeLheightOffset)/2;
+  eyeLy+= ((eyeLheightDefault-eyeLheightCurrent)/2); // vertical centering of eye when closing
+  eyeLy-= eyeLheightOffset/2;
+  // Right eye height
+  eyeRheightCurrent = (eyeRheightCurrent + eyeRheightNext + eyeRheightOffset)/2;
+  eyeRy+= (eyeRheightDefault-eyeRheightCurrent)/2; // vertical centering of eye when closing
+  eyeRy-= eyeRheightOffset/2;
 
 
-  // ----old-
-  // eyeLheightCurrent = (eyeLheightCurrent + eyeLheightNext + eyeLheightOffset)/2;
-  // eyeLy+= ((eyeLheightDefault-eyeLheightCurrent)/2); // vertical centering of eye when closing
-  // eyeLy-= eyeLheightOffset/2;
-  // // Right eye height
-  // eyeRheightCurrent = (eyeRheightCurrent + eyeRheightNext + eyeRheightOffset)/2;
-  // eyeRy+= (eyeRheightDefault-eyeRheightCurrent)/2; // vertical centering of eye when closing
-  // eyeRy-= eyeRheightOffset/2;
+  // Open eyes again after closing them
+	if(eyeL_open){
+  	if(eyeLheightCurrent <= 1 + eyeLheightOffset){eyeLheightNext = eyeLheightDefault;/* eyeLwidthNext = eyeLwidthDefault;*/} 
+  }
+  if(eyeR_open){
+  	if(eyeRheightCurrent <= 1 + eyeRheightOffset){eyeRheightNext = eyeRheightDefault; /*eyeRwidthNext = eyeRwidthDefault;*/} 
+  }
+
+  // Left eye width
+  eyeLwidthCurrent = (eyeLwidthCurrent + eyeLwidthNext)/2;
+  // Right eye width
+  eyeRwidthCurrent = (eyeRwidthCurrent + eyeRwidthNext)/2;
 
 
-  // // Open eyes again after closing them
-	// if(eyeL_open){
-  // 	if(eyeLheightCurrent <= 1 + eyeLheightOffset){eyeLheightNext = eyeLheightDefault;/* eyeLwidthNext = eyeLwidthDefault;*/} 
-  // }
-  // if(eyeR_open){
-  // 	if(eyeRheightCurrent <= 1 + eyeRheightOffset){eyeRheightNext = eyeRheightDefault; /*eyeRwidthNext = eyeRwidthDefault;*/} 
-  // }
+  // Space between eyes
+  spaceBetweenCurrent = (spaceBetweenCurrent + spaceBetweenNext)/2;
 
-  // // Left eye width
-  // eyeLwidthCurrent = (eyeLwidthCurrent + eyeLwidthNext)/2;
-  // // Right eye width
-  // eyeRwidthCurrent = (eyeRwidthCurrent + eyeRwidthNext)/2;
+  // Left eye coordinates
+  eyeLx = (eyeLx + eyeLxNext)/2;
+  eyeLy = (eyeLy + eyeLyNext)/2;
+  // Right eye coordinates
+  eyeRxNext = eyeLxNext+eyeLwidthCurrent+spaceBetweenCurrent; // right eye's x position depends on left eyes position + the space between
+  eyeRyNext = eyeLyNext; // right eye's y position should be the same as for the left eye
+  eyeRx = (eyeRx + eyeRxNext)/2;
+  eyeRy = (eyeRy + eyeRyNext)/2;
 
-
-  // // Space between eyes
-  // spaceBetweenCurrent = (spaceBetweenCurrent + spaceBetweenNext)/2;
-
-  // // Left eye coordinates
-  // eyeLx = (eyeLx + eyeLxNext)/2;
-  // eyeLy = (eyeLy + eyeLyNext)/2;
-  // // Right eye coordinates
-  // eyeRxNext = eyeLxNext+eyeLwidthCurrent+spaceBetweenCurrent; // right eye's x position depends on left eyes position + the space between
-  // eyeRyNext = eyeLyNext; // right eye's y position should be the same as for the left eye
-  // eyeRx = (eyeRx + eyeRxNext)/2;
-  // eyeRy = (eyeRy + eyeRyNext)/2;
-
-  // // Left eye border radius
-  // eyeLborderRadiusCurrent = (eyeLborderRadiusCurrent + eyeLborderRadiusNext)/2;
-  // // Right eye border radius
-  // eyeRborderRadiusCurrent = (eyeRborderRadiusCurrent + eyeRborderRadiusNext)/2;
+  // Left eye border radius
+  eyeLborderRadiusCurrent = (eyeLborderRadiusCurrent + eyeLborderRadiusNext)/2;
+  // Right eye border radius
+  eyeRborderRadiusCurrent = (eyeRborderRadiusCurrent + eyeRborderRadiusNext)/2;
   
 
   //// APPLYING MACRO ANIMATIONS ////
@@ -694,73 +699,6 @@ void drawEyes(){
     spaceBetweenCurrent = 0;
   }
 
-  if (moods[TIRED])  {eyelidsTiredHeightNext = eyeLheightCurrent/2; eyelidsAngryHeightNext = 0;} else{eyelidsTiredHeightNext = 0;}
-  if (moods[ANGRY] || moods[SCEPTIC])  {eyelidsAngryHeightNext = eyeLheightCurrent/2; /*eyelidsTiredHeightNext = 0;*/}
-  if (moods[HAPPY])  {eyelidsHappyBottomOffsetNext = eyeLheightCurrent/2;}
-  if (moods[H_SQUINT])  {eyelidsHappyBottomOffsetNext = 7*eyeLheightCurrent/10;}
-  if (moods[SQUINT])  {eyelidsHappyBottomOffsetNext = 8*eyeLheightCurrent/10;}
-  if (moods[SLEEP]){
-    eyeLyNext = screenHeight/2-eyeLheightDefault;
-    eyeRyNext = screenHeight/2-eyeLheightDefault;
-  }
-  if(moods[AMAZED]){
-    eyeLheightNext = int(eyeLheightDefault*1.2+0.5);
-    eyeLwidthNext = int(eyeLheightDefault*1.2+0.5);
-    if(!cyclops){
-      eyeRheightNext = int(eyeRheightDefault*1.2+0.5);
-      eyeRwidthNext = int(eyeRheightDefault*1.2+0.5);
-    }
-  }
-  // if (moods[SCEPTIC]) {} else{}
-  // if (moods[ANNOYED]) {} else{}
-  if (!moods[HAPPY] && !moods[H_SQUINT] && !moods[SQUINT])  {eyelidsHappyBottomOffsetNext = 0;}
-  if (!moods[ANGRY] && !moods[SCEPTIC])  {eyelidsAngryHeightNext = 0;}
-
-  eyelidsTiredHeight = (eyelidsTiredHeight + eyelidsTiredHeightNext)/2;
-  eyelidsAngryHeight = (eyelidsAngryHeight + eyelidsAngryHeightNext)/2;
-  eyelidsHappyBottomOffset = (eyelidsHappyBottomOffset + eyelidsHappyBottomOffsetNext)/2;
-
-
-  eyeLheightCurrent = (eyeLheightCurrent + eyeLheightNext + eyeLheightOffset)/2;
-  eyeLy+= ((eyeLheightDefault-eyeLheightCurrent)/2); // vertical centering of eye when closing
-  eyeLy-= eyeLheightOffset/2;
-  // Right eye height
-  eyeRheightCurrent = (eyeRheightCurrent + eyeRheightNext + eyeRheightOffset)/2;
-  eyeRy+= (eyeRheightDefault-eyeRheightCurrent)/2; // vertical centering of eye when closing
-  eyeRy-= eyeRheightOffset/2;
-
-
-  // Open eyes again after closing them
-	if(eyeL_open){
-  	if(eyeLheightCurrent <= 1 + eyeLheightOffset){eyeLheightNext = eyeLheightDefault;/* eyeLwidthNext = eyeLwidthDefault;*/} 
-  }
-  if(eyeR_open){
-  	if(eyeRheightCurrent <= 1 + eyeRheightOffset){eyeRheightNext = eyeRheightDefault; /*eyeRwidthNext = eyeRwidthDefault;*/} 
-  }
-
-  // Left eye width
-  eyeLwidthCurrent = (eyeLwidthCurrent + eyeLwidthNext)/2;
-  // Right eye width
-  eyeRwidthCurrent = (eyeRwidthCurrent + eyeRwidthNext)/2;
-
-
-  // Space between eyes
-  spaceBetweenCurrent = (spaceBetweenCurrent + spaceBetweenNext)/2;
-
-  // Left eye coordinates
-  eyeLx = (eyeLx + eyeLxNext)/2;
-  eyeLy = (eyeLy + eyeLyNext)/2;
-  // Right eye coordinates
-  eyeRxNext = eyeLxNext+eyeLwidthCurrent+spaceBetweenCurrent; // right eye's x position depends on left eyes position + the space between
-  eyeRyNext = eyeLyNext; // right eye's y position should be the same as for the left eye
-  eyeRx = (eyeRx + eyeRxNext)/2;
-  eyeRy = (eyeRy + eyeRyNext)/2;
-
-  // Left eye border radius
-  eyeLborderRadiusCurrent = (eyeLborderRadiusCurrent + eyeLborderRadiusNext)/2;
-  // Right eye border radius
-  eyeRborderRadiusCurrent = (eyeRborderRadiusCurrent + eyeRborderRadiusNext)/2;
-
   //// ACTUAL DRAWINGS ////
 
   display.clearDisplay(); // start with a blank screen
@@ -780,35 +718,34 @@ void drawEyes(){
     }
   }
     
-  // Prepare mood type transitions   ----old-
-  // if (moods[TIRED])  {eyelidsTiredHeightNext = eyeLheightCurrent/2; eyelidsAngryHeightNext = 0;} else{eyelidsTiredHeightNext = 0;}
-  // if (moods[ANGRY] || moods[SCEPTIC])  {eyelidsAngryHeightNext = eyeLheightCurrent/2; /*eyelidsTiredHeightNext = 0;*/}
-  // if (moods[HAPPY])  {eyelidsHappyBottomOffsetNext = eyeLheightCurrent/2;}
-  // if (moods[H_SQUINT])  {eyelidsHappyBottomOffsetNext = 7*eyeLheightCurrent/10;}
-  // if (moods[SQUINT])  {eyelidsHappyBottomOffsetNext = 8*eyeLheightCurrent/10;}
-  // // if (moods[SCEPTIC]) {} else{}
-  // // if (moods[ANNOYED]) {} else{}
-  // if (!moods[HAPPY] && !moods[H_SQUINT] && !moods[SQUINT])  {eyelidsHappyBottomOffsetNext = 0;}
-  // if (!moods[ANGRY] && !moods[SCEPTIC])  {eyelidsAngryHeightNext = 0;}
+  // Prepare mood type transitions
+  if (moods[TIRED])  {eyelidsTiredHeightNext = eyeLheightCurrent/2; eyelidsAngryHeightNext = 0;} else{eyelidsTiredHeightNext = 0;}
+  if (moods[ANGRY] || moods[SCEPTIC])  {eyelidsAngryHeightNext = eyeLheightCurrent/2; /*eyelidsTiredHeightNext = 0;*/}
+  if (moods[HAPPY])  {eyelidsHappyBottomOffsetNext = eyeLheightCurrent/2;}
+  if (moods[H_SQUINT])  {eyelidsHappyBottomOffsetNext = 7*eyeLheightCurrent/10;}
+  if (moods[SQUINT])  {eyelidsHappyBottomOffsetNext = 8*eyeLheightCurrent/10;}
+  // if (moods[SCEPTIC]) {} else{}
+  // if (moods[ANNOYED]) {} else{}
+  if (!moods[HAPPY] && !moods[H_SQUINT] && !moods[SQUINT])  {eyelidsHappyBottomOffsetNext = 0;}
+  if (!moods[ANGRY] && !moods[SCEPTIC])  {eyelidsAngryHeightNext = 0;}
 
   if (moods[SLEEP]){
     display.fillRoundRect(eyeLx-1, eyeLy, eyeLwidthCurrent+2, eyelidsSleepHeight, eyeLborderRadiusCurrent, BGCOLOR); // left eye
     if (!cyclops){ 
       display.fillRoundRect(eyeRx-1, eyeRy, eyeRwidthCurrent+2, eyelidsSleepHeight, eyeRborderRadiusCurrent, BGCOLOR); // right eye
     }
-    //---old-
-    // eyeLyNext = screenHeight/2-eyeLheightDefault;
-    // eyeRyNext = screenHeight/2-eyeLheightDefault;
+    // eyelidsHappyBottomOffsetNext = eyeLheightCurrent-1;
+    eyeLyNext = screenHeight/2-eyeLheightDefault;
+    eyeRyNext = screenHeight/2-eyeLheightDefault;
   }
 
   if (moods[AMAZED]){ //---------- fix this ---------- 1.2 stuff         ALSO doesn't work when height and width are current 
-  // ----old-
-    // eyeLheightNext = int(eyeLheightDefault*1.2+0.5);
-    // eyeLwidthNext = int(eyeLheightDefault*1.2+0.5);
-    // if(!cyclops){
-    //   eyeRheightNext = int(eyeRheightDefault*1.2+0.5);
-    //   eyeRwidthNext = int(eyeRheightDefault*1.2+0.5);
-    // }
+    eyeLheightNext = int(eyeLheightDefault*1.2+0.5);
+    eyeLwidthNext = int(eyeLheightDefault*1.2+0.5);
+    if(!cyclops){
+      eyeRheightNext = int(eyeRheightDefault*1.2+0.5);
+      eyeRwidthNext = int(eyeRheightDefault*1.2+0.5);
+    }
     if(eyeFill){
       display.fillRoundRect(LxAmazed, LyAmazed, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
       if (!cyclops){
@@ -822,8 +759,8 @@ void drawEyes(){
     }
   }
 
-  // Draw tired top eyelids // ----old-
-  // eyelidsTiredHeight = (eyelidsTiredHeight + eyelidsTiredHeightNext)/2;
+  // Draw tired top eyelids 
+  eyelidsTiredHeight = (eyelidsTiredHeight + eyelidsTiredHeightNext)/2;
   if(moods[TIRED]){
       if (!cyclops){
         display.fillTriangle(eyeLx, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx, eyeLy+eyelidsTiredHeight-1, BGCOLOR); // left eye 
@@ -835,8 +772,8 @@ void drawEyes(){
       }
   }
 
-  // Draw angry top eyelids //----old-
-    // eyelidsAngryHeight = (eyelidsAngryHeight + eyelidsAngryHeightNext)/2;
+  // Draw angry top eyelids 
+    eyelidsAngryHeight = (eyelidsAngryHeight + eyelidsAngryHeightNext)/2;
     if(moods[ANGRY]){
       if (!cyclops){ 
         display.fillTriangle(eyeLx, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsAngryHeight-1, BGCOLOR); // left eye
@@ -857,8 +794,8 @@ void drawEyes(){
       }
     }
 
-  // Draw happy bottom eyelids //----old-
-  // eyelidsHappyBottomOffset = (eyelidsHappyBottomOffset + eyelidsHappyBottomOffsetNext)/2;
+  // Draw happy bottom eyelids
+  eyelidsHappyBottomOffset = (eyelidsHappyBottomOffset + eyelidsHappyBottomOffsetNext)/2;
   if(moods[HAPPY] || moods[H_SQUINT] || moods[SQUINT]){
       display.fillRoundRect(eyeLx-1, (eyeLy+eyeLheightCurrent)-eyelidsHappyBottomOffset+1, eyeLwidthCurrent+2, eyeLheightDefault, eyeLborderRadiusCurrent, BGCOLOR); // left eye
       if (!cyclops){ 
@@ -895,7 +832,7 @@ void drawEyes(){
         display.drawRect(0, eyeLy+int(eyeLheightDefault*0.7+0.5+3), screenWidth, eyeLheightCurrent, MAINCOLOR);
       }
     }
-    //eyelidsHappyBottomOffsetNext = 0; test
+    eyelidsHappyBottomOffsetNext = 0;
   }
 
   // display.setTextSize(1); // set text size to 2
