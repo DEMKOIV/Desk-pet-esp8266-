@@ -35,7 +35,7 @@
 
 // For mood type switch
 #define DEFAULT 0
-#define TIRED 1
+#define SAD 1
 #define ANGRY 2
 #define HAPPY 3
 #define SQUINT 4
@@ -83,7 +83,7 @@ unsigned long fpsTimer = 0; // for timing the frames per second
 
 // For controlling mood types and expressions
 bool moods[num_moods] = {};
-// byte 
+//byte 
 
 byte curiousOffset = 2; // amount that eye's heaight incrases in curious mode: defaultHeight*curiousOffset/10 (will be devided by 10, so = 0.2 actually) 
 bool curious = 0; // if true, draw the outer eye larger when looking left or right
@@ -148,8 +148,8 @@ int eyeRyNext = eyeRy;
 // BOTH EYES 
 // Eyelid top size
 byte eyelidsHeightMax = eyeLheightDefault/2; // top eyelids max height
-byte eyelidsTiredHeight = 0;
-byte eyelidsTiredHeightNext = eyelidsTiredHeight;
+byte eyelidsSadHeight = 0;
+byte eyelidsSadHeightNext = eyelidsSadHeight;
 byte eyelidsAngryHeight = 0;
 byte eyelidsAngryHeightNext = eyelidsAngryHeight;
 // Bottom happy eyelids offset
@@ -651,8 +651,8 @@ void drawEyes(){
     spaceBetweenCurrent = 0;
   }
 
-  if (moods[TIRED])  {eyelidsTiredHeightNext = eyeLheightCurrent/2; eyelidsAngryHeightNext = 0;} else{eyelidsTiredHeightNext = 0;}
-  if (moods[ANGRY] || moods[SCEPTIC])  {eyelidsAngryHeightNext = eyeLheightCurrent/2; /*eyelidsTiredHeightNext = 0;*/}
+  if (moods[SAD])  {eyelidsSadHeightNext = eyeLheightCurrent/2; eyelidsAngryHeightNext = 0;} else{eyelidsSadHeightNext = 0;}
+  if (moods[ANGRY] || moods[SCEPTIC])  {eyelidsAngryHeightNext = eyeLheightCurrent/2; /*eyelidsSadHeightNext = 0;*/}
   if (moods[HAPPY])  {eyelidsHappyBottomOffsetNext = eyeLheightCurrent/2;}
   if (moods[H_SQUINT])  {eyelidsHappyBottomOffsetNext = 7*eyeLheightCurrent/10;}
   if (moods[SQUINT])  {eyelidsHappyBottomOffsetNext = 8*eyeLheightCurrent/10;}
@@ -670,7 +670,7 @@ void drawEyes(){
   if (!moods[HAPPY] && !moods[H_SQUINT] && !moods[SQUINT])  {eyelidsHappyBottomOffsetNext = 0;}
   if (!moods[ANGRY] && !moods[SCEPTIC])  {eyelidsAngryHeightNext = 0;}
 
-  eyelidsTiredHeight = (eyelidsTiredHeight + eyelidsTiredHeightNext)/2;
+  eyelidsSadHeight = (eyelidsSadHeight + eyelidsSadHeightNext)/2;
   eyelidsAngryHeight = (eyelidsAngryHeight + eyelidsAngryHeightNext)/2;
   eyelidsHappyBottomOffset = (eyelidsHappyBottomOffset + eyelidsHappyBottomOffsetNext)/2;
 
@@ -753,15 +753,15 @@ void drawEyes(){
     }
   }
 
-  // Draw tired top eyelids
-  if(moods[TIRED]){
+  // Draw sad top eyelids
+  if(moods[SAD]){
       if (!cyclops){
-        display.fillTriangle(eyeLx, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx, eyeLy+eyelidsTiredHeight-1, BGCOLOR); // left eye 
-        display.fillTriangle(eyeRx, eyeRy-1, eyeRx+eyeRwidthCurrent, eyeRy-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsTiredHeight-1, BGCOLOR); // right eye
+        display.fillTriangle(eyeLx, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx, eyeLy+eyelidsSadHeight-1, BGCOLOR); // left eye 
+        display.fillTriangle(eyeRx, eyeRy-1, eyeRx+eyeRwidthCurrent, eyeRy-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsSadHeight-1, BGCOLOR); // right eye
       } else {
-        // Cyclops tired eyelids
-        display.fillTriangle(eyeLx, eyeLy-1, eyeLx+(eyeLwidthCurrent/2), eyeLy-1, eyeLx, eyeLy+eyelidsTiredHeight-1, BGCOLOR); // left eyelid half
-        display.fillTriangle(eyeLx+(eyeLwidthCurrent/2), eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsTiredHeight-1, BGCOLOR); // right eyelid half
+        // Cyclops sad eyelids
+        display.fillTriangle(eyeLx, eyeLy-1, eyeLx+(eyeLwidthCurrent/2), eyeLy-1, eyeLx, eyeLy+eyelidsSadHeight-1, BGCOLOR); // left eyelid half
+        display.fillTriangle(eyeLx+(eyeLwidthCurrent/2), eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsSadHeight-1, BGCOLOR); // right eyelid half
       }
   }
 
@@ -803,9 +803,9 @@ void drawEyes(){
       display.fillTriangle(eyeLx, eyeLy+eyelidsSleepyHeight-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsSleepyHeight-1, eyeLx, eyeLy+eyelidsSleepyHeight+1, BGCOLOR); // left eye 
       display.fillTriangle(eyeRx, eyeRy+eyelidsSleepyHeight-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsSleepyHeight-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsSleepyHeight+1, BGCOLOR); // right eye
     } else {
-      // Cyclops tired eyelids
-      display.fillTriangle(eyeLx, eyeLy-1, eyeLx+(eyeLwidthCurrent/2), eyeLy-1, eyeLx, eyeLy+eyelidsTiredHeight-1, BGCOLOR); // left eyelid half
-      display.fillTriangle(eyeLx+(eyeLwidthCurrent/2), eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsTiredHeight-1, BGCOLOR); // right eyelid half
+      // Cyclops sad eyelids
+      display.fillTriangle(eyeLx, eyeLy-1, eyeLx+(eyeLwidthCurrent/2), eyeLy-1, eyeLx, eyeLy+eyelidsSadHeight-1, BGCOLOR); // left eyelid half
+      display.fillTriangle(eyeLx+(eyeLwidthCurrent/2), eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsSadHeight-1, BGCOLOR); // right eyelid half
     }
   }
 

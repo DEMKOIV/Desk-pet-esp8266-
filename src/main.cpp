@@ -23,7 +23,7 @@ byte func = 0;
 bool anim = 0;
 bool fill = 1;
 
-unsigned char moods[] = {DEFAULT, TIRED, ANGRY, HAPPY, H_SQUINT, SQUINT, SCEPTIC, AMAZED, SLEEPY, SLEEP};
+unsigned char moods[] = {DEFAULT, SAD, ANGRY, HAPPY, H_SQUINT, SQUINT, SCEPTIC, AMAZED, SLEEPY, SLEEP};
 
 void setup() {
   Serial.begin(9600);
