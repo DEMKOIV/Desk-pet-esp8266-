@@ -262,7 +262,12 @@ void reset_moods(){
   if(moods[AMAZED]){
     eyeLheightNext = eyeLheightDefault;
     eyeLwidthNext = eyeLwidthDefault;
+    eyeLxNext = eyeLxDefault;
+    eyeLyNext = eyeLyDefault;
     if(!cyclops){
+      spaceBetweenNext = spaceBetweenDefault;
+      eyeRxNext = eyeRxDefault;
+      eyeRyNext = eyeRyDefault;
       eyeRheightNext = eyeRheightDefault;
       eyeRwidthNext = eyeRwidthDefault;
     }
@@ -575,7 +580,7 @@ void drawEyes(){
  
   //// APPLYING MACRO ANIMATIONS ////
 
-	if(autoblinker && !moods[SLEEP]){
+	if(autoblinker && !moods[SLEEP] && !moods[AMAZED]){
 		if(millis() >= blinktimer){
       if(blinkMode == MIX){
         wayToBlink = random(2);
@@ -612,7 +617,7 @@ void drawEyes(){
   }
 
   // Idle - eyes moving to random positions on screen
-  if(idle && !moods[SLEEP] /*&& !moods[AMAZED]*/){
+  if(idle && !moods[SLEEP] && !moods[AMAZED]){
     if(millis() >= idleAnimationTimer){
       eyeLxNext = random(getScreenConstraint_X());
       eyeLyNext = random(getScreenConstraint_Y());
@@ -660,9 +665,16 @@ void drawEyes(){
   if (moods[AMAZED]){ //---------- fix this ---------- 1.2 stuff
     eyeLheightNext = int(eyeLheightDefault*1.2+0.5);
     eyeLwidthNext = int(eyeLheightDefault*1.2+0.5);
+    //eyeLxNext =;
     if(!cyclops){
+      spaceBetweenNext = spaceBetweenDefault*0.6;
       eyeRheightNext = int(eyeRheightDefault*1.2+0.5);
       eyeRwidthNext = int(eyeRheightDefault*1.2+0.5);
+      eyeLxNext = (screenWidth-spaceBetweenCurrent)/2-eyeLwidthCurrent; //((screenWidth)-((eyeLwidthDefault*1.2)/*+(spaceBetweenDefault*0.5)*/+(eyeLheightDefault*1.2)))/2;
+      eyeLyNext = (screenHeight-eyeLheightCurrent)/2;      //((screenHeight-(eyeLheightDefault*1.2))/2);
+      eyeRxNext = (screenWidth+spaceBetweenCurrent)/2+eyeLwidthCurrent;    //eyeLyNext+(spaceBetweenDefault*0.5)+(eyeLheightDefault*1.2);
+      eyeRyNext = (screenHeight-eyeRheightCurrent)/2;
+     
     }
   }
   // if (moods[SCEPTIC]) {} else{}
@@ -718,7 +730,7 @@ void drawEyes(){
   display.clearDisplay(); // start with a blank screen
 
   // Draw basic eye rectangles
-  if(!moods[AMAZED] /*&& moods[SQUINT]*/){
+  //if(!moods[AMAZED] /*&& moods[SQUINT]*/){
     if(eyeFill){
       display.fillRoundRect(eyeLx, eyeLy, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
       if (!cyclops){
@@ -730,7 +742,7 @@ void drawEyes(){
         display.drawRoundRect(eyeRx, eyeRy, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
       }
     }
-  }
+  //}
 
   if (moods[SLEEP]){
     display.fillRoundRect(eyeLx-1, eyeLy, eyeLwidthCurrent+2, eyelidsSleepHeight, eyeLborderRadiusCurrent, BGCOLOR); // left eye
@@ -739,19 +751,19 @@ void drawEyes(){
     }
   }
 
-  if (moods[AMAZED]){
-    if(eyeFill){
-      display.fillRoundRect(LxAmazed, LyAmazed, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
-      if (!cyclops){
-        display.fillRoundRect(RxAmazed, RyAmazed, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
-      }
-    } else{
-      display.drawRoundRect(LxAmazed, LyAmazed, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
-      if (!cyclops){
-        display.drawRoundRect(RxAmazed, RyAmazed, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
-      }
-    }
-  }
+  // if (moods[AMAZED]){
+  //   if(eyeFill){
+  //     display.fillRoundRect(LxAmazed, LyAmazed, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
+  //     if (!cyclops){
+  //       display.fillRoundRect(RxAmazed, RyAmazed, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
+  //     }
+  //   } else{
+  //     display.drawRoundRect(LxAmazed, LyAmazed, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
+  //     if (!cyclops){
+  //       display.drawRoundRect(RxAmazed, RyAmazed, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
+  //     }
+  //   }
+  // }
 
   // Draw sad top eyelids
   if(moods[SAD]){

@@ -18,7 +18,7 @@ bool b2;
 
 unsigned long del;
 
-byte mood = 0;
+byte mood = 9;
 byte func = 0;
 bool anim = 0;
 bool fill = 1;
