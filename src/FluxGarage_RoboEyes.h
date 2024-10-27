@@ -122,8 +122,7 @@ int eyeRheightCurrent = 1; // start with closed eye, otherwise set to eyeRheight
 int eyeRwidthNext = eyeRwidthDefault;
 int eyeRheightNext = eyeRheightDefault;
 int eyeRheightOffset = 0;
-byte RxAmazed;
-byte RyAmazed;
+
 // Border Radius
 byte eyeRborderRadiusDefault = 8;
 byte eyeRborderRadiusCurrent = eyeRborderRadiusDefault;
@@ -229,8 +228,6 @@ void begin(int width, int height, byte frameRate) {
   eyeLy = eyeLyDefault;
   eyeLxNext = eyeLx;
   eyeLyNext = eyeLy;
-  LxAmazed = ((screenWidth)-((eyeLheightDefault*1.2)+(spaceBetweenDefault*0.5)+(eyeLheightDefault*1.2)))/2; //calculates x position of an Amazed left eye ((screenWidth)-(eyeLwidthNext+(spaceBetweenDefault*0.5)+eyeLheightNext))/2;
-  LyAmazed = ((screenHeight-(eyeLheightDefault*1.2))/2); // calculates y position of an Amazed left eye ((screenHeight-eyeLheightNext)/2);
 
   // EYE RIGHT - Coordinates
   eyeRxDefault = eyeLx+eyeLwidthCurrent+spaceBetweenDefault;
@@ -239,8 +236,6 @@ void begin(int width, int height, byte frameRate) {
   eyeRy = eyeRyDefault;
   eyeRxNext = eyeRx;
   eyeRyNext = eyeRy;
-  RxAmazed = LxAmazed+(spaceBetweenDefault*0.5)+(eyeLheightDefault*1.2);
-  RyAmazed = LyAmazed;
 
   eyelidsSleepyHeight = int(eyeLheightDefault*0.7+0.5); // +0.5 to round the number without using math lib
   eyelidsSleepHeight = eyeLheightDefault-3;  // ---------MAKE ADAPTIVE---------
@@ -670,9 +665,9 @@ void drawEyes(){
       spaceBetweenNext = spaceBetweenDefault*0.6;
       eyeRheightNext = int(eyeRheightDefault*1.2+0.5);
       eyeRwidthNext = int(eyeRheightDefault*1.2+0.5);
-      eyeLxNext = (screenWidth-spaceBetweenCurrent)/2-eyeLwidthCurrent; //((screenWidth)-((eyeLwidthDefault*1.2)/*+(spaceBetweenDefault*0.5)*/+(eyeLheightDefault*1.2)))/2;
-      eyeLyNext = (screenHeight-eyeLheightCurrent)/2;      //((screenHeight-(eyeLheightDefault*1.2))/2);
-      eyeRxNext = (screenWidth+spaceBetweenCurrent)/2+eyeLwidthCurrent;    //eyeLyNext+(spaceBetweenDefault*0.5)+(eyeLheightDefault*1.2);
+      eyeLxNext = (screenWidth-spaceBetweenCurrent)/2-eyeLwidthCurrent;
+      eyeLyNext = (screenHeight-eyeLheightCurrent)/2;
+      eyeRxNext = (screenWidth+spaceBetweenCurrent)/2+eyeLwidthCurrent;
       eyeRyNext = (screenHeight-eyeRheightCurrent)/2;
      
     }
@@ -730,7 +725,6 @@ void drawEyes(){
   display.clearDisplay(); // start with a blank screen
 
   // Draw basic eye rectangles
-  //if(!moods[AMAZED] /*&& moods[SQUINT]*/){
     if(eyeFill){
       display.fillRoundRect(eyeLx, eyeLy, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
       if (!cyclops){
@@ -742,7 +736,7 @@ void drawEyes(){
         display.drawRoundRect(eyeRx, eyeRy, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
       }
     }
-  //}
+
 
   if (moods[SLEEP]){
     display.fillRoundRect(eyeLx-1, eyeLy, eyeLwidthCurrent+2, eyelidsSleepHeight, eyeLborderRadiusCurrent, BGCOLOR); // left eye
@@ -750,20 +744,6 @@ void drawEyes(){
       display.fillRoundRect(eyeRx-1, eyeRy, eyeRwidthCurrent+2, eyelidsSleepHeight, eyeRborderRadiusCurrent, BGCOLOR); // right eye
     }
   }
-
-  // if (moods[AMAZED]){
-  //   if(eyeFill){
-  //     display.fillRoundRect(LxAmazed, LyAmazed, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
-  //     if (!cyclops){
-  //       display.fillRoundRect(RxAmazed, RyAmazed, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
-  //     }
-  //   } else{
-  //     display.drawRoundRect(LxAmazed, LyAmazed, eyeLwidthCurrent, eyeLheightCurrent, eyeLborderRadiusCurrent, MAINCOLOR); // left eye
-  //     if (!cyclops){
-  //       display.drawRoundRect(RxAmazed, RyAmazed, eyeRwidthCurrent, eyeRheightCurrent, eyeRborderRadiusCurrent, MAINCOLOR); // right eye
-  //     }
-  //   }
-  // }
 
   // Draw sad top eyelids
   if(moods[SAD]){
@@ -838,10 +818,10 @@ void drawEyes(){
     }
   }
 
-  display.setTextSize(1); // set text size to 2
-  display.setTextColor(WHITE); // set text color to white
-  display.setCursor(0, 0); // set cursor position
-  display.print(getCurrentMood());
+  // display.setTextSize(1); // set text size to 2
+  // display.setTextColor(WHITE); // set text color to white
+  // display.setCursor(0, 0); // set cursor position
+  // display.print(getCurrentMood());
 
   display.display(); // show drawings on display
 
