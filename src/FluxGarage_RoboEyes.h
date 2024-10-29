@@ -570,6 +570,7 @@ void drawEyes(){
     } // right eye
   } else{
     eyeLheightOffset = 0;
+    eyeRheightOffset = 0;
   }
 
  
