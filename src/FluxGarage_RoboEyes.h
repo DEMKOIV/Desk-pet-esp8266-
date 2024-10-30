@@ -787,18 +787,18 @@ void drawEyes(){
       }
   }
   
-  if(moods[SLEEPY]){ // ----------ADAPT FOR CYCLOPS MODE----------
-    display.fillRect(eyeLx, eyeLy, eyeLwidthCurrent, eyelidsSleepyHeight, BGCOLOR); // left eye
-    if (!cyclops){ 
-      display.fillRect(eyeRx, eyeLy, eyeRwidthCurrent, eyelidsSleepyHeight, BGCOLOR); // right eye
-    }
+  if(moods[SLEEPY]){ // ----------ADAPT FOR CYCLOPS MODE----------  
     if (!cyclops){
+      display.fillRect(eyeLx, eyeLy, eyeLwidthCurrent, eyelidsSleepyHeight, BGCOLOR); // left eye
+      display.fillRect(eyeRx, eyeLy, eyeRwidthCurrent, eyelidsSleepyHeight, BGCOLOR); // right eye
       display.fillTriangle(eyeLx, eyeLy+eyelidsSleepyHeight-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsSleepyHeight-1, eyeLx, eyeLy+eyelidsSleepyHeight+1, BGCOLOR); // left eye 
       display.fillTriangle(eyeRx, eyeRy+eyelidsSleepyHeight-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsSleepyHeight-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsSleepyHeight+1, BGCOLOR); // right eye
     } else {
-      // Cyclops sad eyelids
-      display.fillTriangle(eyeLx, eyeLy-1, eyeLx+(eyeLwidthCurrent/2), eyeLy-1, eyeLx, eyeLy+eyelidsSadHeight-1, BGCOLOR); // left eyelid half
-      display.fillTriangle(eyeLx+(eyeLwidthCurrent/2), eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsSadHeight-1, BGCOLOR); // right eyelid half
+      display.fillRect(eyeLx, eyeLy, eyeLwidthCurrent, eyelidsSleepyHeight, BGCOLOR);
+      display.fillTriangle(eyeLx, eyeLy-1, eyeLx+(eyeLwidthCurrent/2), eyeLy+eyelidsSleepyHeight, eyeLx, eyeLy+eyelidsSleepyHeight+eyeLheightDefault/10, BGCOLOR); // left eyelid half
+      display.fillTriangle(eyeLx+(eyeLwidthCurrent/2), eyeLy+eyelidsSleepyHeight, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsSleepyHeight+eyeLheightDefault/10, BGCOLOR); // right eyelid half
+      //display.fillTriangle(eyeLx, eyeLy, eyeLx+(eyeLwidthCurrent/2), eyeLy+eyelidsSleepyHeight-1, eyeLx, eyeLy+eyelidsSadHeight+1, BGCOLOR); // left eyelid half
+      //display.fillTriangle(eyeLx+eyeLwidthCurrent, eyeLy, eyeLx+(eyeLwidthCurrent/2),eyeLy+eyelidsSleepyHeight-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsSadHeight+1, BGCOLOR); // right eyelid half
     }
   }
 
