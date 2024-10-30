@@ -670,7 +670,8 @@ void drawEyes(){
       eyeLyNext = (screenHeight-eyeLheightCurrent)/2;
       eyeRxNext = (screenWidth+spaceBetweenCurrent)/2+eyeLwidthCurrent;
       eyeRyNext = (screenHeight-eyeRheightCurrent)/2;
-     
+    } else{
+      eyeLxNext = (screenWidth-eyeLwidthCurrent)/2;
     }
   }
   // if (moods[SCEPTIC]) {} else{}
@@ -770,14 +771,14 @@ void drawEyes(){
       }
     }
 
-    //Draw a triangle for sceptic mood
-    if(moods[SCEPTIC]){
-      if (!cyclops){ 
-        display.fillTriangle(eyeRx, eyeRy-1, eyeRx+eyeRwidthCurrent, eyeRy-1, eyeRx, eyeRy+eyelidsAngryHeight-1, BGCOLOR); // right eye
-      } else {
-        display.fillTriangle(eyeLx+(eyeLwidthCurrent/2), eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx+(eyeLwidthCurrent/2), eyeLy+eyelidsAngryHeight-1, BGCOLOR); // right eyelid half
-      }
+  //Draw a triangle for sceptic mood
+  if(moods[SCEPTIC]){
+    if (!cyclops){ 
+      display.fillTriangle(eyeRx, eyeRy-1, eyeRx+eyeRwidthCurrent, eyeRy-1, eyeRx, eyeRy+eyelidsAngryHeight-1, BGCOLOR); // right eye
+    } else {
+      display.fillTriangle(eyeLx+(eyeLwidthCurrent/2), eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx+(eyeLwidthCurrent/2), eyeLy+eyelidsAngryHeight-1, BGCOLOR); // right eyelid half
     }
+  }
 
   // Draw happy bottom eyelids
   if(moods[HAPPY] || moods[H_SQUINT] || moods[SQUINT]){
@@ -787,7 +788,7 @@ void drawEyes(){
       }
   }
   
-  if(moods[SLEEPY]){ // ----------ADAPT FOR CYCLOPS MODE----------  
+  if(moods[SLEEPY]){
     if (!cyclops){
       display.fillRect(eyeLx, eyeLy, eyeLwidthCurrent, eyelidsSleepyHeight, BGCOLOR); // left eye
       display.fillRect(eyeRx, eyeLy, eyeRwidthCurrent, eyelidsSleepyHeight, BGCOLOR); // right eye
@@ -797,8 +798,6 @@ void drawEyes(){
       display.fillRect(eyeLx, eyeLy, eyeLwidthCurrent, eyelidsSleepyHeight, BGCOLOR);
       display.fillTriangle(eyeLx, eyeLy-1, eyeLx+(eyeLwidthCurrent/2), eyeLy+eyelidsSleepyHeight, eyeLx, eyeLy+eyelidsSleepyHeight+eyeLheightDefault/10, BGCOLOR); // left eyelid half
       display.fillTriangle(eyeLx+(eyeLwidthCurrent/2), eyeLy+eyelidsSleepyHeight, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsSleepyHeight+eyeLheightDefault/10, BGCOLOR); // right eyelid half
-      //display.fillTriangle(eyeLx, eyeLy, eyeLx+(eyeLwidthCurrent/2), eyeLy+eyelidsSleepyHeight-1, eyeLx, eyeLy+eyelidsSadHeight+1, BGCOLOR); // left eyelid half
-      //display.fillTriangle(eyeLx+eyeLwidthCurrent, eyeLy, eyeLx+(eyeLwidthCurrent/2),eyeLy+eyelidsSleepyHeight-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsSadHeight+1, BGCOLOR); // right eyelid half
     }
   }
 
