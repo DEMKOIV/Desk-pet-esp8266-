@@ -9,6 +9,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 roboEyes roboEyes; // create RoboEyes instance
 
+String message = "Привіт, від Ані :3";
+
 #define b1_pin 13
 #define b2_pin 0
 #define delayy 399
@@ -54,7 +56,7 @@ void setup() {
   roboEyes.setBlinkMode(MIX);
 
   // Cyclops mode
-  roboEyes.setCyclops(ON); // bool on/off -> if turned on, robot has only on eye
+  //roboEyes.setCyclops(ON); // bool on/off -> if turned on, robot has only on eye
 
   // Define mood, curiosity and position
   //roboEyes.setMood(DEFAULT); // mood expressions, can be TIRED, ANGRY, HAPPY, DEFAULT

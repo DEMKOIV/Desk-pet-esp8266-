@@ -801,6 +801,11 @@ void drawEyes(){
     }
   }
 
+  // if(!moods[AMAZED]){
+  //   // display.drawRoundRect(eyeLx+eyeLwidthCurrent/2, eyeLy+eyeLheightCurrent+3, eyeLwidthCurrent+spaceBetweenCurrent, 10, eyeLborderRadiusCurrent, MAINCOLOR);
+  //   display.drawRoundRect(eyeLx+eyeLwidthCurrent+6, eyeLy+eyeLheightCurrent, spaceBetweenCurrent-6, 10, eyeLborderRadiusCurrent, MAINCOLOR);
+  // }
+
   // Line blink
   if (eyeLheightCurrent < eyeLheightDefault/2 && wayToBlink){
     if(!moods[SLEEPY]){
