@@ -9,8 +9,6 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 roboEyes roboEyes; // create RoboEyes instance
 
-String message = "Привіт, від Ані :3";
-
 #define b1_pin 13
 #define b2_pin 0
 #define delayy 399
