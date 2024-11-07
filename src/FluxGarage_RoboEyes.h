@@ -250,6 +250,12 @@ void update(){
 }
 
 void reset_moods(){
+  if(moods[SLEEPY]){
+    eyeLheightNext = eyeLheightDefault;
+    if(!cyclops){
+      eyeRheightNext = eyeRheightDefault;
+    }
+  }
   if(moods[SLEEP]){
     eyeLyNext = eyeLyDefault;
     eyeRyNext = eyeRyDefault;
@@ -673,12 +679,18 @@ void drawEyes(){
   if (moods[HAPPY])  {eyelidsHappyBottomOffsetNext = eyeLheightCurrent/2;}
   if (moods[H_SQUINT])  {eyelidsHappyBottomOffsetNext = 7*eyeLheightCurrent/10;}
   if (moods[SQUINT])  {/*eyelidsHappyBottomOffsetNext = 8*eyeLheightCurrent/10;*/
-    eyeLheightNext = int(eyeLheightDefault*0.7+0.5);
+    eyeLheightNext = int(eyeLheightDefault*0.2+0.5);
     if(!cyclops){
-      eyeRheightNext = int(eyeRheightDefault*0.7+0.5);
-    }
-  
+      eyeRheightNext = int(eyeRheightDefault*0.2+0.5);
+    }  
   }
+
+  // if(moods[SLEEPY]){
+  //   eyeLheightNext = int(eyeLheightDefault*0.3+0.5);
+  //   if(!cyclops){
+  //     eyeRheightNext = int(eyeRheightDefault*0.3+0.5);
+  //   }
+  // }
 
   if (moods[AMAZED]){ //---------- fix this ---------- 1.2 stuff
     eyeLheightNext = int(eyeLheightDefault*1.2+0.5);
@@ -816,6 +828,8 @@ void drawEyes(){
       display.fillRect(eyeRx, eyeLy, eyeRwidthCurrent, eyelidsSleepyHeight, BGCOLOR); // right eye
       display.fillTriangle(eyeLx, eyeLy+eyelidsSleepyHeight-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsSleepyHeight-1, eyeLx, eyeLy+eyelidsSleepyHeight+1, BGCOLOR); // left eye 
       display.fillTriangle(eyeRx, eyeRy+eyelidsSleepyHeight-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsSleepyHeight-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsSleepyHeight+1, BGCOLOR); // right eye
+      //display.fillTriangle(eyeLx, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx, eyeLy+1, BGCOLOR); // left eye 
+      //display.fillTriangle(eyeRx, eyeRy-1, eyeRx+eyeRwidthCurrent, eyeRy-1, eyeRx+eyeRwidthCurrent, eyeRy+1, BGCOLOR); // right eye
     } else {
       display.fillRect(eyeLx, eyeLy, eyeLwidthCurrent, eyelidsSleepyHeight, BGCOLOR);
       display.fillTriangle(eyeLx, eyeLy-1, eyeLx+(eyeLwidthCurrent/2), eyeLy+eyelidsSleepyHeight, eyeLx, eyeLy+eyelidsSleepyHeight+eyeLheightDefault/10, BGCOLOR); // left eyelid half
@@ -831,11 +845,16 @@ void drawEyes(){
       } else {
         display.drawRect(0, eyeLy, screenWidth, eyeLheightCurrent, MAINCOLOR);
       }
-    } else if(eyeLheightCurrent < int(eyeLheightDefault*0.7+0.5)){
+    } else if(eyeLheightCurrent < int(eyeLheightDefault*0.3+0.5)){
+      // if(eyeFill && lineBlinkFill){
+      //   display.fillRect(0, eyeLy+int(eyeLheightDefault*0.7+0.5+3), screenWidth, eyeLheightCurrent, MAINCOLOR);
+      // } else {
+      //   display.drawRect(0, eyeLy+int(eyeLheightDefault*0.7+0.5+3), screenWidth, eyeLheightCurrent, MAINCOLOR);
+      // }
       if(eyeFill && lineBlinkFill){
-        display.fillRect(0, eyeLy+int(eyeLheightDefault*0.7+0.5+3), screenWidth, eyeLheightCurrent, MAINCOLOR);
+        display.fillRect(0, eyeLy, screenWidth, eyeLheightCurrent, MAINCOLOR);
       } else {
-        display.drawRect(0, eyeLy+int(eyeLheightDefault*0.7+0.5+3), screenWidth, eyeLheightCurrent, MAINCOLOR);
+        display.drawRect(0, eyeLy, screenWidth, eyeLheightCurrent, MAINCOLOR);
       }
     }
   }
