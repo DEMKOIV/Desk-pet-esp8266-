@@ -54,7 +54,7 @@ void setup() {
   roboEyes.setBlinkMode(MIX);
 
   // Cyclops mode
-  roboEyes.setCyclops(ON); // bool on/off -> if turned on, robot has only on eye
+  //roboEyes.setCyclops(ON); // bool on/off -> if turned on, robot has only on eye
 
   // Define mood, curiosity and position
   //roboEyes.setMood(DEFAULT); // mood expressions, can be TIRED, ANGRY, HAPPY, DEFAULT

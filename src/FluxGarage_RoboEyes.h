@@ -238,7 +238,7 @@ void begin(int width, int height, byte frameRate) {
   eyeRyNext = eyeRy;
 
   eyelidsSleepyHeight = int(eyeLheightDefault*0.7+0.5); // +0.5 to round the number without using math lib
-  eyelidsSleepHeight = eyeLheightDefault-int(eyeLheightDefault/10+0.5);
+  eyelidsSleepHeight = eyeLheightDefault-3;  // ---------MAKE ADAPTIVE---------
 }
 
 void update(){
@@ -250,21 +250,9 @@ void update(){
 }
 
 void reset_moods(){
-  if(moods[SLEEPY]){
-    eyeLheightNext = eyeLheightDefault;
-    if(!cyclops){
-      eyeRheightNext = eyeRheightDefault;
-    }
-  }
   if(moods[SLEEP]){
     eyeLyNext = eyeLyDefault;
     eyeRyNext = eyeRyDefault;
-  }
-  if(moods[SQUINT]){
-    eyeLheightNext = eyeLheightDefault;
-    if(!cyclops){
-      eyeRheightNext = eyeRheightDefault;
-    }
   }
   if(moods[AMAZED]){
     eyeLheightNext = eyeLheightDefault;
@@ -336,12 +324,12 @@ void setPosition(unsigned char position)
     case N:
       // North, top center
       eyeLxNext = getScreenConstraint_X()/2;
-      eyeLyNext = 1;
+      eyeLyNext = 0;
       break;
     case NE:
       // North-east, top right
       eyeLxNext = getScreenConstraint_X();
-      eyeLyNext = 1;
+      eyeLyNext = 0;
       break;
     case E:
       // East, middle right
@@ -360,18 +348,18 @@ void setPosition(unsigned char position)
       break;
     case SW:
       // South-west, bottom left
-      eyeLxNext = 1;
+      eyeLxNext = 0;
       eyeLyNext = getScreenConstraint_Y();
       break;
     case W:
       // West, middle left
-      eyeLxNext = 1;
+      eyeLxNext = 0;
       eyeLyNext = getScreenConstraint_Y()/2;
       break;
     case NW:
       // North-west, top left
-      eyeLxNext = 1;
-      eyeLyNext = 1;
+      eyeLxNext = 0;
+      eyeLyNext = 0;
       break;
     default:
       // Middle center
@@ -430,16 +418,6 @@ void setVFlicker (bool flickerBit) {
   vFlicker = flickerBit; // turn flicker on or off
 }
 
-/**************************************************************************/
-/*!
-   @brief     Set a way to blink 
-     unsighned byte: 
-    @param 0 (or DEFAULT): eyes' height goes to 0 and back up
-    @param 1 (or LINE): at one point eyes become a rectangle
-    @param 3 (or MIX): randomizes between default and line
-    
-*/
-/**************************************************************************/
 void setBlinkMode(unsigned char blink_mode){
   if(blink_mode != MIX){
     blinkMode = blink_mode;
@@ -678,19 +656,7 @@ void drawEyes(){
   if (moods[ANGRY] || moods[SCEPTIC])  {eyelidsAngryHeightNext = eyeLheightCurrent/2; /*eyelidsSadHeightNext = 0;*/}
   if (moods[HAPPY])  {eyelidsHappyBottomOffsetNext = eyeLheightCurrent/2;}
   if (moods[H_SQUINT])  {eyelidsHappyBottomOffsetNext = 7*eyeLheightCurrent/10;}
-  if (moods[SQUINT])  {/*eyelidsHappyBottomOffsetNext = 8*eyeLheightCurrent/10;*/
-    eyeLheightNext = int(eyeLheightDefault*0.2+0.5);
-    if(!cyclops){
-      eyeRheightNext = int(eyeRheightDefault*0.2+0.5);
-    }  
-  }
-
-  // if(moods[SLEEPY]){
-  //   eyeLheightNext = int(eyeLheightDefault*0.3+0.5);
-  //   if(!cyclops){
-  //     eyeRheightNext = int(eyeRheightDefault*0.3+0.5);
-  //   }
-  // }
+  if (moods[SQUINT])  {eyelidsHappyBottomOffsetNext = 8*eyeLheightCurrent/10;}
 
   if (moods[AMAZED]){ //---------- fix this ---------- 1.2 stuff
     eyeLheightNext = int(eyeLheightDefault*1.2+0.5);
@@ -710,7 +676,7 @@ void drawEyes(){
   }
   // if (moods[SCEPTIC]) {} else{}
   // if (moods[ANNOYED]) {} else{}
-  if (!moods[HAPPY] && !moods[H_SQUINT]/* && !moods[SQUINT]*/)  {eyelidsHappyBottomOffsetNext = 0;}
+  if (!moods[HAPPY] && !moods[H_SQUINT] && !moods[SQUINT])  {eyelidsHappyBottomOffsetNext = 0;}
   if (!moods[ANGRY] && !moods[SCEPTIC])  {eyelidsAngryHeightNext = 0;}
 
   eyelidsSadHeight = (eyelidsSadHeight + eyelidsSadHeightNext)/2;
@@ -828,8 +794,6 @@ void drawEyes(){
       display.fillRect(eyeRx, eyeLy, eyeRwidthCurrent, eyelidsSleepyHeight, BGCOLOR); // right eye
       display.fillTriangle(eyeLx, eyeLy+eyelidsSleepyHeight-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsSleepyHeight-1, eyeLx, eyeLy+eyelidsSleepyHeight+1, BGCOLOR); // left eye 
       display.fillTriangle(eyeRx, eyeRy+eyelidsSleepyHeight-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsSleepyHeight-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsSleepyHeight+1, BGCOLOR); // right eye
-      //display.fillTriangle(eyeLx, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx, eyeLy+1, BGCOLOR); // left eye 
-      //display.fillTriangle(eyeRx, eyeRy-1, eyeRx+eyeRwidthCurrent, eyeRy-1, eyeRx+eyeRwidthCurrent, eyeRy+1, BGCOLOR); // right eye
     } else {
       display.fillRect(eyeLx, eyeLy, eyeLwidthCurrent, eyelidsSleepyHeight, BGCOLOR);
       display.fillTriangle(eyeLx, eyeLy-1, eyeLx+(eyeLwidthCurrent/2), eyeLy+eyelidsSleepyHeight, eyeLx, eyeLy+eyelidsSleepyHeight+eyeLheightDefault/10, BGCOLOR); // left eyelid half
@@ -837,24 +801,24 @@ void drawEyes(){
     }
   }
 
+  // if(!moods[AMAZED]){
+  //   // display.drawRoundRect(eyeLx+eyeLwidthCurrent/2, eyeLy+eyeLheightCurrent+3, eyeLwidthCurrent+spaceBetweenCurrent, 10, eyeLborderRadiusCurrent, MAINCOLOR);
+  //   display.drawRoundRect(eyeLx+eyeLwidthCurrent+6, eyeLy+eyeLheightCurrent, spaceBetweenCurrent-6, 10, eyeLborderRadiusCurrent, MAINCOLOR);
+  // }
+
   // Line blink
   if (eyeLheightCurrent < eyeLheightDefault/2 && wayToBlink){
-    if(!moods[SLEEPY] && !moods[SQUINT]){
+    if(!moods[SLEEPY]){
       if(eyeFill && lineBlinkFill){
         display.fillRect(0, eyeLy, screenWidth, eyeLheightCurrent, MAINCOLOR);
       } else {
         display.drawRect(0, eyeLy, screenWidth, eyeLheightCurrent, MAINCOLOR);
       }
-    } else if(eyeLheightCurrent < int(eyeLheightDefault*0.3+0.5)){
-      // if(eyeFill && lineBlinkFill){
-      //   display.fillRect(0, eyeLy+int(eyeLheightDefault*0.7+0.5+3), screenWidth, eyeLheightCurrent, MAINCOLOR);
-      // } else {
-      //   display.drawRect(0, eyeLy+int(eyeLheightDefault*0.7+0.5+3), screenWidth, eyeLheightCurrent, MAINCOLOR);
-      // }
+    } else if(eyeLheightCurrent <= int(eyeLheightDefault*0.7+0.5)){
       if(eyeFill && lineBlinkFill){
-        display.fillRect(0, eyeLy, screenWidth, eyeLheightCurrent, MAINCOLOR);
+        display.fillRect(0, eyeLy+int(eyeLheightDefault*0.7+0.5+3), screenWidth, eyeLheightCurrent, MAINCOLOR);
       } else {
-        display.drawRect(0, eyeLy, screenWidth, eyeLheightCurrent, MAINCOLOR);
+        display.drawRect(0, eyeLy+int(eyeLheightDefault*0.7+0.5+3), screenWidth, eyeLheightCurrent, MAINCOLOR);
       }
     }
   }
@@ -872,3 +836,4 @@ void drawEyes(){
 
 #endif
 // TODO: 
+// - Maybe make a function to check if the mood is blinkable, moveable and curiosity-able to avoid if statements
