@@ -788,6 +788,11 @@ void drawEyes(){
       }
   }
   
+  // if(!moods[AMAZED]){
+  //   // display.drawRoundRect(eyeLx+eyeLwidthCurrent/2, eyeLy+eyeLheightCurrent+3, eyeLwidthCurrent+spaceBetweenCurrent, 10, eyeLborderRadiusCurrent, MAINCOLOR);
+  //   display.drawRoundRect(eyeLx+eyeLwidthCurrent+6, eyeLy+eyeLheightCurrent, spaceBetweenCurrent-6, 10, eyeLborderRadiusCurrent, MAINCOLOR);
+  // }
+
   if(moods[SLEEPY]){
     if (!cyclops){
       display.fillRect(eyeLx, eyeLy, eyeLwidthCurrent, eyelidsSleepyHeight, BGCOLOR); // left eye
@@ -800,11 +805,6 @@ void drawEyes(){
       display.fillTriangle(eyeLx+(eyeLwidthCurrent/2), eyeLy+eyelidsSleepyHeight, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsSleepyHeight+eyeLheightDefault/10, BGCOLOR); // right eyelid half
     }
   }
-
-  // if(!moods[AMAZED]){
-  //   // display.drawRoundRect(eyeLx+eyeLwidthCurrent/2, eyeLy+eyeLheightCurrent+3, eyeLwidthCurrent+spaceBetweenCurrent, 10, eyeLborderRadiusCurrent, MAINCOLOR);
-  //   display.drawRoundRect(eyeLx+eyeLwidthCurrent+6, eyeLy+eyeLheightCurrent, spaceBetweenCurrent-6, 10, eyeLborderRadiusCurrent, MAINCOLOR);
-  // }
 
   // Line blink
   if (eyeLheightCurrent < eyeLheightDefault/2 && wayToBlink){
@@ -836,4 +836,10 @@ void drawEyes(){
 
 #endif
 // TODO: 
-// - Maybe make a function to check if the mood is blinkable, moveable and curiosity-able to avoid if statements
+// - Make adequate squint mood 
+// - Make squint mood blinkable beacuse blinks don't really work correctly
+// - Remove "ghost" numbers and make them into #define thingy
+// - Maybe make a branch for test versions (right now I've set "beta-version" to main branch and "main" to a side branch, it should be reversed)
+// IDEAS:
+// - Make sleep mode so that esp goes into deep-sleep (altough it would make the lib more esp focused, so think about it)
+// - Make an option for eyes to move slowly up and down when sleeping to imitate breathing (something like this: https://f.io/lTBvLwZd)
